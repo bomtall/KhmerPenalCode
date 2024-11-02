@@ -14,40 +14,8 @@ import streamlit as st
 from pathlib import Path
 
 
-penal_dict = {
-
-    "Theft": {
-        "standard": {
-            "prison": {"min": 6, "max": 36},
-            "fine": {"min": 1000000, "max": 6000000}                            
-        },
-        "aggrevations": {
-            "Article 357": {
-                "article": "Article 357",
-                "clauses": [
-                    "Committed by breaking and entering"
-                    "Preceded, accompanied or followed by acts of violence"
-                    ],
-                    "prison": {"min": 36, "max": 120}
-            },
-            "Article 358": {
-                "article": "Article 358",
-                "clauses": [
-                    "Preceded, accompanied or followed by acts of violence causing mutilation or permanent disability"
-                    ],
-                    "prison": {"min": 120, "max": 240}
-            },
-            "Article 359": {
-                "article": "Article 359",
-                "clauses": [
-                    "Preceded, accompanied or followed by torture or acts of cruelty"
-                ],
-                "prison": {"min": 180, "max": 360}
-            }
-        }
-    }
-}
-
+with open("resources/data.json", "r") as f:
+    penal_dict = json.load(f)
 
 st.set_page_config(
     page_title="Khmer Sentencing Guide",
@@ -55,6 +23,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
 
 row1 = st.columns((1,1,1), gap="medium")
 row2 = st.columns(1)
@@ -69,13 +38,17 @@ if crime_dropdown:
 with row1[1]:
     st.markdown("#### Standard sentences")
     if crime_dropdown:
-        st.text_input(label="Maximum prison sentence (months)", value=crime_dict["standard"]["prison"]["max"], disabled=True)
-        st.text_input(label="Minimum prison sentence (months)", value=crime_dict["standard"]["prison"]["min"], disabled=True)
+        standard_max_sentence = crime_dict["standard"]["prison"]["max"]
+        standard_min_sentence = crime_dict["standard"]["prison"]["min"]
+        st.metric(label="Maximum prison sentence (years)", value=standard_max_sentence)
+        st.metric(label="Minimum prison sentence (years)", value=standard_min_sentence)
 with row1[2]:
     st.markdown("#### Standard fines")
     if crime_dropdown:
-        st.text_input(label="Maximum fine", value=crime_dict["standard"]["fine"]["max"], disabled=True)
-        st.text_input(label="Minimum fine", value=crime_dict["standard"]["fine"]["min"], disabled=True)
+        standard_max_fine = crime_dict["standard"]["fine"]["max"]
+        standard_min_fine = crime_dict["standard"]["fine"]["min"]
+        st.metric(label="Maximum fine", value="៛" + millify.millify(standard_max_fine))
+        st.metric(label="Minimum fine", value="៛" + millify.millify(standard_min_fine))
 with row2[0]:
     st.markdown('---')
 
@@ -88,29 +61,36 @@ with row3[1]:
         aggrevations_radio = st.radio(
             label="Select the most severe article that applies or none",
             options=[crime_dict["aggrevations"][x]["article"] for x in crime_dict["aggrevations"]],
-            captions=[";".join(crime_dict["aggrevations"][x]["clauses"]) for x in crime_dict["aggrevations"]],
+            captions=["; Or ".join(crime_dict["aggrevations"][x]["clauses"]) for x in crime_dict["aggrevations"]],
             index=None
             )
 with row3[0]:
     if crime_dropdown and aggrevations_radio:
-        st.text_input(label="Aggrevated maximum sentence", value=crime_dict["aggrevations"][aggrevations_radio]["prison"]["max"])
-        st.text_input(label="Aggrevated minimum sentence", value=crime_dict["aggrevations"][aggrevations_radio]["prison"]["min"])
+        agg_max_sentence = crime_dict["aggrevations"][aggrevations_radio]["prison"]["max"]
+        agg_min_sentence = crime_dict["aggrevations"][aggrevations_radio]["prison"]["min"]
+        st.metric(label="Aggrevated maximum sentence", value=agg_max_sentence, delta=agg_max_sentence - standard_max_sentence)
+        st.metric(label="Aggrevated minimum sentence", value=agg_min_sentence, delta = agg_min_sentence - standard_min_sentence)
 with row4[0]:
     st.markdown('---')
 
 st.markdown("## 3. Previous convictions")
+st.markdown("Does the indictment cite the previous conviction?")
 st.markdown('---')
 
 st.markdown("## 4. Mitigating circumstances")
+st.markdown("Are there mitigating circumstances warranted by the nature of the offence or the character of the accused?")
 st.markdown('---')
 
 st.markdown("## 5. Initial prison & fine determination")
+st.markdown("After sections 2, 3 and 4 what is the minimum and what is the maximum sentence of imprisonment?")
 st.markdown('---')
 
 st.markdown("## 6. Suspended sentences")
+st.markdown("Is the sentence to be passed at section 5 for the current offence less than 5 years (and a fine)?")
 st.markdown('---')
 
 st.markdown("## 7. Additional penalties")
+st.markdown("Select any number of additional penalties")
 st.markdown('---')
 
 st.markdown("## 8. Final sentence")

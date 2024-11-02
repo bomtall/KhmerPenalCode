@@ -1,0 +1,57 @@
+{
+    "Theft": {
+        "article": "",
+        "standard": {
+            "prison": {"min": 0.5, "max": 3},
+            "fine": {"min": 1000000, "max": 6000000}                            
+        },
+        "aggrevations": {
+            "Article 357": {
+                "article": "Article 357",
+                "clauses": [
+                    "Committed by breaking and entering",
+                    "Preceded, accompanied or followed by acts of violence"
+                    ],
+                    "prison": {"min": 3, "max": 10}
+            },
+            "Article 358": {
+                "article": "Article 358",
+                "clauses": [
+                    "Preceded, accompanied or followed by acts of violence causing mutilation or permanent disability"
+                    ],
+                    "prison": {"min": 10, "max": 20}
+            },
+            "Article 359": {
+                "article": "Article 359",
+                "clauses": [
+                    "Preceded, accompanied or followed by torture or acts of cruelty"
+                ],
+                "prison": {"min": 15, "max": 30}
+            }
+        }
+    },
+    "Murder": {
+        "article": "Article 199",
+        "standard": {
+            "prison": {"min": -1, "max": -1},
+            "fine": {"min": -100, "max": -100}                            
+        },
+        "aggrevations": {
+            "Article XXX": {
+                "article": "Article XXX",
+                "clauses": [
+                    "clause1",
+                    "clause2"
+                    ],
+                    "prison": {"min": -1, "max": -1}
+            },
+            "Article xxx": {
+                "article": "Article xxx",
+                "clauses": [
+                    "clause"
+                    ],
+                    "prison": {"min": -1, "max": -1}
+            }
+        }
+    }
+}
