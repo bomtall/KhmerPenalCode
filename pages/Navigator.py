@@ -1,17 +1,14 @@
 import sys
 import toml
 import json
-import scipy
 import millify
-import gspread
 import requests
 import calendar
-import numpy as np
-import pandas as pd
-import polars as pl
 import datetime as dt
 import streamlit as st
 from pathlib import Path
+from src import utils
+
 
 
 with open("resources/data.json", "r") as f:
@@ -29,26 +26,26 @@ row1 = st.columns((1,1,1), gap="medium")
 row2 = st.columns(1)
 row3 = st.columns((1,1), gap="medium")
 row4 = st.columns(1)
+row5 = st.columns((1,1,1), gap="medium")
+row6 = st.columns(1)
 
 with row1[0]:
     st.markdown("## 1. Offence")
-    crime_dropdown = st.selectbox("Select crime", ["Theft"], index=None)
-if crime_dropdown:
-    crime_dict = penal_dict[crime_dropdown]
+    crime_dropdown = st.selectbox("Select crime", list(penal_dict.keys()), index=None)
+    if crime_dropdown:
+        crime_dict = penal_dict[crime_dropdown]
+        crime = utils.SentenceGuide(crime_dict)
 with row1[1]:
     st.markdown("#### Standard sentences")
     if crime_dropdown:
-        standard_max_sentence = crime_dict["standard"]["prison"]["max"]
-        standard_min_sentence = crime_dict["standard"]["prison"]["min"]
-        st.metric(label="Maximum prison sentence (years)", value=standard_max_sentence)
-        st.metric(label="Minimum prison sentence (years)", value=standard_min_sentence)
+        st.metric(label="Maximum prison sentence (years)", value=crime.standard_max_sentence)
+        st.metric(label="Minimum prison sentence (years)", value=crime.standard_min_sentence)
 with row1[2]:
-    st.markdown("#### Standard fines")
-    if crime_dropdown:
-        standard_max_fine = crime_dict["standard"]["fine"]["max"]
-        standard_min_fine = crime_dict["standard"]["fine"]["min"]
-        st.metric(label="Maximum fine", value="៛" + millify.millify(standard_max_fine))
-        st.metric(label="Minimum fine", value="៛" + millify.millify(standard_min_fine))
+    
+    if crime_dropdown and crime.standard_max_fine:
+        st.markdown("#### Standard fines")
+        st.metric(label="Maximum fine", value="៛" + millify.millify(crime.standard_max_fine))
+        st.metric(label="Minimum fine", value="៛" + millify.millify(crime.standard_min_fine))
 with row2[0]:
     st.markdown('---')
 
@@ -60,22 +57,64 @@ with row3[1]:
     if crime_dropdown:
         aggrevations_radio = st.radio(
             label="Select the most severe article that applies or none",
-            options=[crime_dict["aggrevations"][x]["article"] for x in crime_dict["aggrevations"]],
-            captions=["; Or ".join(crime_dict["aggrevations"][x]["clauses"]) for x in crime_dict["aggrevations"]],
+            options=crime.aggrevation_articles + ["None"],
+            captions=crime.aggrevation_clauses + ["None"],
             index=None
             )
 with row3[0]:
-    if crime_dropdown and aggrevations_radio:
-        agg_max_sentence = crime_dict["aggrevations"][aggrevations_radio]["prison"]["max"]
-        agg_min_sentence = crime_dict["aggrevations"][aggrevations_radio]["prison"]["min"]
-        st.metric(label="Aggrevated maximum sentence", value=agg_max_sentence, delta=agg_max_sentence - standard_max_sentence)
-        st.metric(label="Aggrevated minimum sentence", value=agg_min_sentence, delta = agg_min_sentence - standard_min_sentence)
+    if crime_dropdown and aggrevations_radio and aggrevations_radio != "None":
+        crime.set_agg_max_sentence(aggrevations_radio)
+        crime.set_agg_min_sentence(aggrevations_radio)
+        st.metric(
+            label="Aggrevated maximum sentence",
+            value=crime.agg_max_sentence,
+            delta=crime.agg_max_sentence - crime.standard_max_sentence,
+            delta_color="inverse"
+        )
+        st.metric(
+            label="Aggrevated minimum sentence",
+            value=crime.agg_min_sentence,
+            delta=crime.agg_min_sentence - crime.standard_min_sentence,
+            delta_color="inverse"
+        )
 with row4[0]:
     st.markdown('---')
 
-st.markdown("## 3. Previous convictions")
-st.markdown("Does the indictment cite the previous conviction?")
-st.markdown('---')
+with row5[0]:
+    st.markdown("## 3. Previous convictions")
+if crime_dropdown and aggrevations_radio:
+    with row5[0]:    
+        prev_conviction = st.selectbox(label="Does the indictment cite the previous conviction?", options=["Yes", "No"], index=None)
+        if prev_conviction == "Yes":
+            crime.prev_conviction = True
+        elif prev_conviction == "No":
+            crime.prev_conviction = False
+        
+        if crime.prev_conviction:
+            prev_conviction_pardon = st.selectbox(label="Has the previous conviction been pardoned?", options=["Yes", "No"], index=None)
+            if prev_conviction_pardon == "Yes":
+                crime.prev_conviction_pardon = True
+            elif prev_conviction_pardon == "No":
+                crime.prev_conviction_pardon = False
+    with row5[1]:
+        if crime.prev_conviction and crime.prev_conviction_pardon == False:
+            st.selectbox(
+                label="Was the previous conviction a felony, misdemeanour or petty offence?",
+                options=["Felony", "Misdemeanour", "Petty offence"],
+                index=None                             
+            )
+    with row5[2]:
+        if prev_conviction == "Yes" and prev_conviction_pardon == "No":
+            st.markdown(
+    """
+    Felony: 5 years to life imprisonment  \n
+    Misdemeanour: 7 days to 5 years imprisonment  \n
+    Petty Offence: fine or up to 6 days in prison
+    """ 
+            )
+
+with row6[0]:
+    st.markdown('---')
 
 st.markdown("## 4. Mitigating circumstances")
 st.markdown("Are there mitigating circumstances warranted by the nature of the offence or the character of the accused?")
