@@ -1,14 +1,9 @@
 import sys
 import toml
 import json
-import scipy
-import millify
-import gspread
 import requests
 import calendar
 import numpy as np
-import pandas as pd
-import polars as pl
 import datetime as dt
 import streamlit as st
 from pathlib import Path
