@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "KhmerPenalCode"
+version = "1.0.0"
+
+[pytest]
+pythonpath="c:/code/khmerpenalcode/khmerpenalcode"
+
+dependencies = [
+    "pytest"
+]
