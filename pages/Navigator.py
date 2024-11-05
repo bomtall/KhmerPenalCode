@@ -7,7 +7,7 @@ import millify
 # import datetime as dt
 import streamlit as st
 # from pathlib import Path
-from src import utils
+from src.sentence_guide import SentenceGuide
 
 
 with open("resources/data.json", "r") as f:
@@ -33,7 +33,7 @@ with row1[0]:
     crime_dropdown = st.selectbox("Select crime", list(penal_dict.keys()), index=None)
     if crime_dropdown:
         crime_dict = penal_dict[crime_dropdown]
-        crime = utils.SentenceGuide(crime_dict)
+        crime = SentenceGuide(crime_dict)
 with row1[1]:
     st.markdown("#### Standard sentences")
     if crime_dropdown:
@@ -108,7 +108,8 @@ if crime_dropdown and aggrevations_radio:
             
             st.selectbox(
                 label="Was a suspended sentence for any misdemeanour or felony pronounced within 5 years before the offence? (Art 109)",
-                options=["Yes", "No"]
+                options=["Yes", "No"],
+                index=None
             )
 
     with row5[2]:
