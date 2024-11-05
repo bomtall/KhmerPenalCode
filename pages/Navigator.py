@@ -1,14 +1,13 @@
-import sys
-import toml
+# import sys
+# import toml
 import json
 import millify
-import requests
-import calendar
-import datetime as dt
+# import requests
+# import calendar
+# import datetime as dt
 import streamlit as st
-from pathlib import Path
+# from pathlib import Path
 from src import utils
-
 
 
 with open("resources/data.json", "r") as f:
@@ -40,12 +39,13 @@ with row1[1]:
     if crime_dropdown:
         st.metric(label="Maximum prison sentence (years)", value=crime.standard_max_sentence)
         st.metric(label="Minimum prison sentence (years)", value=crime.standard_min_sentence)
+
 with row1[2]:
-    
     if crime_dropdown and crime.standard_max_fine:
         st.markdown("#### Standard fines")
         st.metric(label="Maximum fine", value="៛" + millify.millify(crime.standard_max_fine))
         st.metric(label="Minimum fine", value="៛" + millify.millify(crime.standard_min_fine))
+
 with row2[0]:
     st.markdown('---')
 
@@ -98,20 +98,31 @@ if crime_dropdown and aggrevations_radio:
                 crime.prev_conviction_pardon = False
     with row5[1]:
         if crime.prev_conviction and crime.prev_conviction_pardon == False:
-            st.selectbox(
+            prev_conviction_type = st.selectbox(
                 label="Was the previous conviction a felony, misdemeanour or petty offence?",
                 options=["Felony", "Misdemeanour", "Petty offence"],
                 index=None                             
             )
-    with row5[2]:
-        if prev_conviction == "Yes" and prev_conviction_pardon == "No":
-            st.markdown(
-    """
-    Felony: 5 years to life imprisonment  \n
-    Misdemeanour: 7 days to 5 years imprisonment  \n
-    Petty Offence: fine or up to 6 days in prison
-    """ 
+            crime.prev_conviction_type = prev_conviction_type
+        if crime.prev_conviction_type in ["Felony", "Misdemeanour"]:
+            
+            st.selectbox(
+                label="Was a suspended sentence for any misdemeanour or felony pronounced within 5 years before the offence? (Art 109)",
+                options=["Yes", "No"]
             )
+
+    with row5[2]:
+        if crime.prev_conviction and crime.prev_conviction_pardon == False:
+            st.markdown(
+                """
+                **Definitions**  \n
+                **Felony**: *From five years to life imprisonment*  \n
+                **Misdemeanour**: *from seven days up to five years imprisonment*  \n
+                **Petty Offence**: *A fine or up to 6 days in prison*
+                """
+            )
+            
+
 
 with row6[0]:
     st.markdown('---')
