@@ -7,7 +7,7 @@ import millify
 # import datetime as dt
 import streamlit as st
 # from pathlib import Path
-from src.sentence_guide import SentenceGuide
+from src.sentence_guide import SentenceGuide, Crime
 
 
 with open("resources/data.json", "r") as f:
@@ -28,12 +28,16 @@ row4 = st.columns(1)
 row5 = st.columns((1,1,1), gap="medium")
 row6 = st.columns(1)
 
+crime=None
+
 with row1[0]:
     st.markdown("## 1. Offence")
     crime_dropdown = st.selectbox("Select crime", list(penal_dict.keys()), index=None)
+    
     if crime_dropdown:
-        crime_dict = penal_dict[crime_dropdown]
-        crime = SentenceGuide(crime_dict)
+        crime = Crime(penal_dict[crime_dropdown])
+        sentence_guide = SentenceGuide(crime)
+        
 with row1[1]:
     st.markdown("#### Standard sentences")
     if crime_dropdown:
@@ -41,7 +45,7 @@ with row1[1]:
         st.metric(label="Minimum prison sentence (years)", value=crime.standard_min_sentence)
 
 with row1[2]:
-    if crime_dropdown and crime.standard_max_fine:
+    if crime and crime.standard_max_fine:
         st.markdown("#### Standard fines")
         st.metric(label="Maximum fine", value="៛" + millify.millify(crime.standard_max_fine))
         st.metric(label="Minimum fine", value="៛" + millify.millify(crime.standard_min_fine))
@@ -54,7 +58,7 @@ with row3[0]:
     st.markdown("Only one or none of the three options can apply. If any applicable, then select the most serious")
         
 with row3[1]:
-    if crime_dropdown:
+    if crime:
         aggrevations_radio = st.radio(
             label="Select the most severe article that applies or none",
             options=crime.aggrevation_articles + ["None"],
@@ -62,19 +66,19 @@ with row3[1]:
             index=None
             )
 with row3[0]:
-    if crime_dropdown and aggrevations_radio and aggrevations_radio != "None":
-        crime.set_agg_max_sentence(aggrevations_radio)
-        crime.set_agg_min_sentence(aggrevations_radio)
+    if crime and aggrevations_radio and aggrevations_radio != "None":
+        sentence_guide.set_agg_max_sentence(aggrevations_radio)
+        sentence_guide.set_agg_min_sentence(aggrevations_radio)
         st.metric(
             label="Aggrevated maximum sentence",
-            value=crime.agg_max_sentence,
-            delta=crime.agg_max_sentence - crime.standard_max_sentence,
+            value=sentence_guide.agg_max_sentence,
+            delta=sentence_guide.agg_max_sentence - crime.standard_max_sentence,
             delta_color="inverse"
         )
         st.metric(
             label="Aggrevated minimum sentence",
-            value=crime.agg_min_sentence,
-            delta=crime.agg_min_sentence - crime.standard_min_sentence,
+            value=sentence_guide.agg_min_sentence,
+            delta=sentence_guide.agg_min_sentence - crime.standard_min_sentence,
             delta_color="inverse"
         )
 with row4[0]:
@@ -82,38 +86,22 @@ with row4[0]:
 
 with row5[0]:
     st.markdown("## 3. Previous convictions")
-if crime_dropdown and aggrevations_radio:
+if crime and aggrevations_radio:
     with row5[0]:    
         prev_conviction = st.selectbox(label="Does the indictment cite the previous conviction?", options=["Yes", "No"], index=None)
         if prev_conviction == "Yes":
-            crime.prev_conviction = True
+            sentence_guide.prev_conviction = True
         elif prev_conviction == "No":
-            crime.prev_conviction = False
+            sentence_guide.prev_conviction = False
         
-        if crime.prev_conviction:
+        if sentence_guide.prev_conviction:
             prev_conviction_pardon = st.selectbox(label="Has the previous conviction been pardoned?", options=["Yes", "No"], index=None)
             if prev_conviction_pardon == "Yes":
-                crime.prev_conviction_pardon = True
+                sentence_guide.prev_conviction_pardon = True
             elif prev_conviction_pardon == "No":
-                crime.prev_conviction_pardon = False
+                sentence_guide.prev_conviction_pardon = False
     with row5[1]:
-        if crime.prev_conviction and crime.prev_conviction_pardon == False:
-            prev_conviction_type = st.selectbox(
-                label="Was the previous conviction a felony, misdemeanour or petty offence?",
-                options=["Felony", "Misdemeanour", "Petty offence"],
-                index=None                             
-            )
-            crime.prev_conviction_type = prev_conviction_type
-        if crime.prev_conviction_type in ["Felony", "Misdemeanour"]:
-            
-            st.selectbox(
-                label="Was a suspended sentence for any misdemeanour or felony pronounced within 5 years before the offence? (Art 109)",
-                options=["Yes", "No"],
-                index=None
-            )
-
-    with row5[2]:
-        if crime.prev_conviction and crime.prev_conviction_pardon == False:
+        if sentence_guide.prev_conviction and sentence_guide.prev_conviction_pardon == False:
             st.markdown(
                 """
                 **Definitions**  \n
@@ -122,7 +110,72 @@ if crime_dropdown and aggrevations_radio:
                 **Petty Offence**: *A fine or up to 6 days in prison*
                 """
             )
+            prev_conviction_type = st.selectbox(
+                label="Was the previous conviction a felony, misdemeanour or petty offence?  \n If both felony & misdemeanour apply, select felony",
+                options=["Felony", "Misdemeanour", "Petty offence"],
+                index=None                             
+            )
+            sentence_guide.prev_conviction_type = prev_conviction_type
+    with row5[2]:       
+        if sentence_guide.prev_conviction_type in ["Felony", "Misdemeanour"]:
+            felony_misd_pronounced_5y = st.selectbox(
+                label="Was a suspended sentence for any misdemeanour or felony pronounced within 5 years before the offence? (Art 109)",
+                options=["Yes", "No"],
+                index=None
+            )
+            if felony_misd_pronounced_5y:
+                sentence_guide.felony_misd_pronounced_5y = bool(felony_misd_pronounced_5y)
+            if sentence_guide.felony_misd_pronounced_5y:
+                st.markdown(
+                    "**Note:** the prior suspended sentence is revoked and the applicable penalty for the new offence will not run concurrently"
+                )
+                special_reasons = st.selectbox(
+                    label="Are there any special reasons not to revoke a prior suspended sentence? (Art 110)",
+                    options=["Yes", "No"],
+                    index=None
+                )
+                if special_reasons == "Yes":
+                    sentence_guide.special_revoke_reasons = st.text_input(label="Please give reasons")
+                    
+        if sentence_guide.prev_conviction and not sentence_guide.prev_conviction_pardon and sentence_guide.prev_conviction_type in ["Felony", "Misdemeanour"]:
+             final_judgement_in_5y = st.selectbox(
+                    label="Was the previous felony or misdemeanour final judgement within 5 years of the date of the offence?",
+                    options=["Yes", "No"],
+                    index=None
+                )
+             if final_judgement_in_5y:
+                sentence_guide.final_judgement_in_5y = True
+        if sentence_guide.final_judgement_in_5y and sentence_guide.prev_conviction_type == "Felony":
+            if sentence_guide.current_max_sentence < 6:
+                sentence_guide.current_max_sentence = 6
+                st.metric(
+                    label="New maximum sentence",
+                    value=sentence_guide.current_max_sentence,
+                    delta=sentence_guide.current_max_sentence - crime.standard_max_sentence,
+                    delta_color="inverse"
+                )
             
+        if sentence_guide.final_judgement_in_5y and sentence_guide.prev_conviction_type == "Misdemeanour":
+            prev_conviction_theft_trust_fraud = st.selectbox(
+                label="Was the previous conviction for: Theft, breach of trust or fraud?",
+                options=["Yes", "No"],
+                index=None
+            )
+            if prev_conviction_theft_trust_fraud == "Yes":
+                sentence_guide.prev_conviction_theft_trust_fraud = True
+                if sentence_guide.current_max_sentence < 6:
+                    sentence_guide.current_max_sentence = 6
+                    st.metric(
+                        label="New maximum sentence",
+                        value=sentence_guide.current_max_sentence,
+                        delta=sentence_guide.current_max_sentence - crime.standard_max_sentence,
+                        delta_color="inverse"
+                    )
+            
+                
+                
+
+    
 
 
 with row6[0]:
