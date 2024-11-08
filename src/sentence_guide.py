@@ -1,6 +1,3 @@
-
-
-
 class Crime:
     def __init__(self, crime_data: dict):
         self.data = crime_data
@@ -37,12 +34,12 @@ class SentenceGuide:
         self.final_judgement_in_5y = None
 
 
-    def set_agg_max_sentence(self, aggrevation: str):
+    def set_agg_max_sentence(self, aggrevation: str) -> None:
         sentence = self.crime.aggrevations[aggrevation]["prison"]["max"]
         self.agg_max_sentence = sentence
         self.current_max_sentence = sentence
 
-    def set_agg_min_sentence(self, aggrevation: str):
+    def set_agg_min_sentence(self, aggrevation: str) -> None:
         sentence = self.crime.aggrevations[aggrevation]["prison"]["min"]
         self.agg_min_sentence = sentence
         self.current_min_sentence = sentence
@@ -62,7 +59,7 @@ class SentenceGuide:
             case 0:
                 new_min_sentence = 0
             case cms if 0.0164 <= cms < 2:
-                new_min_sentence = 0.002734
+                new_min_sentence = 0.00821917808219178
             case cms if 2<= cms < 5:
                 new_min_sentence = 0.5
             case cms if 5<= cms < 10:

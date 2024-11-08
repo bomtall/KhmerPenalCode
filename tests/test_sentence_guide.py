@@ -1,18 +1,14 @@
 import json
 import pytest
 
-# go to pyproject.toml and set property pythonpath as path to project
 
 from KhmerPenalCode.src.sentence_guide import SentenceGuide, Crime
 
 # command to run: pytest tests
 
-
-
 with open("resources/data.json", "r") as f:
     penal_dict = json.load(f)
     
-
 
 @pytest.mark.parametrize(
         'args,kwargs,expected', 
