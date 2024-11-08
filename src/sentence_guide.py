@@ -25,6 +25,8 @@ class SentenceGuide:
         self.crime = crime_obj
         self.current_max_sentence = self.crime.standard_max_sentence
         self.current_min_sentence = self.crime.standard_min_sentence
+        self.current_min_fine = self.crime.standard_min_fine
+        self.current_max_fine = self.crime.standard_max_fine
         self.agg_max_sentence = None
         self.agg_min_sentence = None
         self.prev_conviction = None
@@ -49,5 +51,28 @@ class SentenceGuide:
     # idea to replace function with generalised update func that compares to current and updates
 
 
+    def mitigate_fine_article_94(self) -> float:
+        self.current_min_fine /= 2
+        return self.current_min_fine * -1
+    
 
-
+    def mitigtate_sentence_article_94(self) -> float:
+        new_min_sentence=None
+        match self.current_min_sentence:
+            case 0:
+                new_min_sentence = 0
+            case cms if 0.0164 <= cms < 2:
+                new_min_sentence = 0.002734
+            case cms if 2<= cms < 5:
+                new_min_sentence = 0.5
+            case cms if 5<= cms < 10:
+                new_min_sentence = 1
+            case cms if cms >= 10:
+                new_min_sentence = 2
+        difference = new_min_sentence - self.current_min_sentence 
+        self.current_min_sentence = new_min_sentence
+        return difference
+    
+    
+        
+    

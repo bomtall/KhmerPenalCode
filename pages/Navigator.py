@@ -23,10 +23,11 @@ st.set_page_config(
 
 row1 = st.columns((1,1,1), gap="medium")
 row2 = st.columns(1)
-row3 = st.columns((1,1), gap="medium")
+row3 = st.columns((2,1,1), gap="medium")
 row4 = st.columns(1)
 row5 = st.columns((1,1,1), gap="medium")
 row6 = st.columns(1)
+row7 = st.columns((2,1,1), gap="medium")
 
 crime=None
 
@@ -57,7 +58,6 @@ with row3[0]:
     st.markdown("## 2. Aggravating circumstances")
     st.markdown("Only one or none of the three options can apply. If any applicable, then select the most serious")
         
-with row3[1]:
     if crime:
         aggrevations_radio = st.radio(
             label="Select the most severe article that applies or none",
@@ -65,22 +65,25 @@ with row3[1]:
             captions=crime.aggrevation_clauses + ["None"],
             index=None
             )
-with row3[0]:
-    if crime and aggrevations_radio and aggrevations_radio != "None":
-        sentence_guide.set_agg_max_sentence(aggrevations_radio)
-        sentence_guide.set_agg_min_sentence(aggrevations_radio)
-        st.metric(
-            label="Aggrevated maximum sentence",
-            value=sentence_guide.agg_max_sentence,
-            delta=sentence_guide.agg_max_sentence - crime.standard_max_sentence,
-            delta_color="inverse"
-        )
-        st.metric(
-            label="Aggrevated minimum sentence",
-            value=sentence_guide.agg_min_sentence,
-            delta=sentence_guide.agg_min_sentence - crime.standard_min_sentence,
-            delta_color="inverse"
-        )
+if crime and aggrevations_radio and aggrevations_radio != "None":       
+    with row3[1]:
+        if crime and aggrevations_radio and aggrevations_radio != "None":
+            sentence_guide.set_agg_max_sentence(aggrevations_radio)
+            sentence_guide.set_agg_min_sentence(aggrevations_radio)
+            st.metric(
+                label="Aggrevated maximum sentence",
+                value=sentence_guide.agg_max_sentence,
+                delta=sentence_guide.agg_max_sentence - crime.standard_max_sentence,
+                delta_color="inverse"
+            )
+    with row3[2]:
+            st.metric(
+                label="Aggrevated minimum sentence",
+                value=sentence_guide.agg_min_sentence,
+                delta=sentence_guide.agg_min_sentence - crime.standard_min_sentence,
+                delta_color="inverse"
+            )
+        
 with row4[0]:
     st.markdown('---')
 
@@ -181,8 +184,30 @@ if crime and aggrevations_radio:
 with row6[0]:
     st.markdown('---')
 
-st.markdown("## 4. Mitigating circumstances")
-st.markdown("Are there mitigating circumstances warranted by the nature of the offence or the character of the accused?")
+with row7[0]:
+    st.markdown("## 4. Mitigating circumstances")
+    mitigations = st.selectbox(label="Are there mitigating circumstances warranted by the nature of the offence or the character of the accused?", options=["Yes", "No"], index=None)
+    if mitigations == "Yes":
+        basis_of_mitigations = st.text_area(label="Court to enter basis of finding mitigating circumstances")
+
+if mitigations == "Yes":
+    with row7[1]:
+            min_fine_diff = sentence_guide.mitigate_fine_article_94()
+            min_sentence_diff = sentence_guide.mitigtate_sentence_article_94()
+            st.metric(
+                label="New minimum sentence",
+                value=sentence_guide.current_min_sentence,
+                delta=min_sentence_diff,
+                delta_color="inverse"
+            )
+    with row7[2]:
+            st.metric(
+                label="New minimum fine",
+                value="៛" + millify.millify(sentence_guide.current_min_fine),
+                delta=millify.millify(min_fine_diff),
+                delta_color="inverse"
+            )
+    
 st.markdown('---')
 
 st.markdown("## 5. Initial prison & fine determination")
