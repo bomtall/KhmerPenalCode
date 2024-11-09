@@ -20,7 +20,8 @@ with open("resources/data.json", "r") as f:
 def test_sentence_guide(args, kwargs, expected):
     assert Crime(*args, **kwargs).crime == expected
     
-test_sg_class = SentenceGuide(Crime(penal_dict['Theft']))
+test_sg_class = SentenceGuide()
+test_sg_class.initialise_with_crime(Crime(penal_dict['Theft']))
 
 @pytest.mark.parametrize(
         'args,kwargs,expected', 
