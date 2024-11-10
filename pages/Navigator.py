@@ -18,6 +18,8 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+utils.add_sidebar_elements()
+
 with open("resources/data.json", "r") as f:
     penal_dict = json.load(f)
 
@@ -160,13 +162,13 @@ with row5[1]:
 with row5[2]:                   
     if crime and aggrevations_radio:                   
         if sentence_guide.prev_conviction_pardon == False and sentence_guide.prev_conviction_type in ["Felony", "Misdemeanour"]:
-             final_judgement_in_5y = st.selectbox(
+            final_judgement_in_5y = st.selectbox(
                     label="Was the previous felony or misdemeanour final judgement within 5 years of the date of the offence?",
                     options=["Yes", "No"],
                     index=None
                 )
-             if final_judgement_in_5y:
-                sentence_guide.final_judgement_in_5y = True
+            sentence_guide.final_judgement_in_5y = True if final_judgement_in_5y == "Yes" else False
+
         if sentence_guide.final_judgement_in_5y and sentence_guide.prev_conviction_type == "Felony":
             if sentence_guide.current_max_sentence < 6:
                 sentence_guide.current_max_sentence = 6
@@ -242,7 +244,10 @@ with row12[0]:
 with row13[0]:
     st.markdown("## 7. Additional penalties")
     if crime:
-        st.multiselect(label="Select any number of additional penalties", options=crime.additional_penalties)
+        add_penalties = st.multiselect(label="Select any number of additional penalties", options=crime.additional_penalties)
+        for penalty in add_penalties:
+            st.number_input(label=f"{penalty}: Enter given term")
+
 
 with row14[0]:
     st.markdown('---')

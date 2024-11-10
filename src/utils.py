@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import math
+import streamlit as st
 
 def convert_days_to_years(days: float) -> float:
     return round(days/365, 2)
@@ -21,3 +22,14 @@ def create_sentence_period(years):
         if year_value.is_integer():
             year_value = int(year_value)
         return f"{year_value} years"
+    
+
+def add_sidebar_elements():
+    st.sidebar.title("Khmer Penal Code Navigator")
+    st.sidebar.markdown("Contact: lionelfblackman@gmail.com")
+    st.sidebar.markdown("[Penal Code](https://www.ajne.org/sites/default/files/resource/laws/7195/criminal-code-cambodia-en-kh.pdf)")
+    st.sidebar.image("./resources/penal_code.png", width=150)
+    st.sidebar.markdown("[English Translation](https://www.ajne.org/sites/default/files/resource/laws/7195/criminal-code-cambodia-en-kh.pdf)")
+    st.sidebar.image("./resources/eng_translation.png", width=150)
+    
+    

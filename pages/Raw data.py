@@ -1,5 +1,6 @@
 import json
 import streamlit as st
+from src import utils
 
 st.set_page_config(
     page_title="Khmer Sentencing Guide",
@@ -10,5 +11,7 @@ st.set_page_config(
 
 with open("resources/data.json", "r") as f:
     penal_dict = json.load(f)
+
+utils.add_sidebar_elements()
 
 st.write(penal_dict)
