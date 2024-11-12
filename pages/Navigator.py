@@ -167,7 +167,8 @@ with row5[2]:
                     options=["Yes", "No"],
                     index=None
                 )
-            sentence_guide.final_judgement_in_5y = True if final_judgement_in_5y == "Yes" else False
+            if final_judgement_in_5y == "Yes":
+                sentence_guide.final_judgement_in_5y = True
 
         if sentence_guide.final_judgement_in_5y and sentence_guide.prev_conviction_type == "Felony":
             if sentence_guide.current_max_sentence < 6:
