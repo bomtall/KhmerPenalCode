@@ -11,4 +11,6 @@ pythonpath="c:/code/khmerpenalcode/khmerpenalcode"
 
 dependencies = [
     "pytest"
+    "streamlit"
+    "millify"
 ]
