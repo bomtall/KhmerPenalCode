@@ -1,11 +1,20 @@
 {
     "Theft": {
         "crime": "Theft",
-        "articles": ["Article 353", "Article 354"],
+        "articles": [
+            "Article 353",
+            "Article 354"
+        ],
         "clauses": [],
         "standard": {
-            "prison": {"min": 0.5, "max": 3},
-            "fine": {"min": 1000000, "max": 6000000}                            
+            "prison": {
+                "min": 0.5,
+                "max": 3
+            },
+            "fine": {
+                "min": 1000000,
+                "max": 6000000
+            }
         },
         "aggrevations": {
             "Article 357": {
@@ -13,43 +22,100 @@
                 "clauses": [
                     "Committed by breaking and entering",
                     "Preceded, accompanied or followed by acts of violence"
-                    ],
-                    "prison": {"min": 3, "max": 10}
+                ],
+                "prison": {
+                    "min": 3,
+                    "max": 10
+                }
             },
             "Article 358": {
                 "article": "Article 358",
                 "clauses": [
                     "Preceded, accompanied or followed by acts of violence causing mutilation or permanent disability"
-                    ],
-                    "prison": {"min": 10, "max": 20}
+                ],
+                "prison": {
+                    "min": 10,
+                    "max": 20
+                }
             },
             "Article 359": {
                 "article": "Article 359",
                 "clauses": [
                     "Preceded, accompanied or followed by torture or acts of cruelty"
                 ],
-                "prison": {"min": 15, "max": 30}
+                "prison": {
+                    "min": 15,
+                    "max": 30
+                }
+            },
+            "Article 360": {
+                "article": "Article 360",
+                "clauses": [
+                    "Preceded, accompanied or followed by violence unintentionally causing the death of the victim."
+                ],
+                "prison": {
+                    "min": 15,
+                    "max": 30
+                }
             }
-        }
+        },
+        "additional penalties": [
+            "Forfeiture of certain rights, either permanently or for a period not exceeding five years",
+            "Prohibition from practising a profession in the practice of or in connection with which the offence was committed, either permanently or for a period not exceeding five years",
+            "Prohibition from driving any motor vehicle permanently or for a period not exceeding five years",
+            "Local exclusion for a period not exceeding ten years for a felony or not exceeding five years for a misdemeanour",
+            "Prohibition from entering and residing in the territory of the Kingdom of Cambodia for a convicted foreigner, either permanently or for a period not exceeding five years",
+            "Confiscation of any instruments, materials or items which were used or intended to be used to commit the offence",
+            "Confiscation of the items or funds which were the subject of the offence",
+            "Confiscation of the proceeds or property arising out of the offence",
+            "Confiscation of the utensils, materials and furnishings in the premises in which the offence was committed",
+            "Confiscation of one or more vehicles belonging to the convicted person",
+            "Prohibition from possessing or carrying any weapon, explosive or ammunition of any kind",
+            "Closure of an establishment used to plan or to commit the offence, either permanently or for a period not exceeding five years",
+            "Prohibition from operating an establishment that is open to or used by the public, either permanently or for a period not exceeding five years",
+            "Publication of sentencing decision for a period not exceeding two months",
+            "Publication of sentencing decision in the print media",
+            "Broadcasting of sentencing decision by any audio-visual communication for a period not exceeding eight days"
+        ]
     },
     "Murder": {
         "crime": "Murder",
-        "articles": ["Article 199"],
-        "clauses": ["Wilful killing of another person with or without a weapon with no aggravating circumstances"],
+        "articles": [
+            "Article 199"
+        ],
+        "clauses": [
+            "Wilful killing of another person with or without a weapon with no aggravating circumstances"
+        ],
         "standard": {
-            "prison": {"min": 10, "max": 15},
-            "fine": {"min": null, "max": null}
+            "prison": {
+                "min": 10,
+                "max": 15
+            },
+            "fine": {
+                "min": null,
+                "max": null
+            }
         },
         "aggrevations": {
             "Article 200": {
                 "article": "Article 200",
-                "clauses": ["Murder committed with premeditation or by ambush"],
-                "prison": {"min": 15, "max": 30}                           
+                "clauses": [
+                    "Murder committed with premeditation or by ambush"
+                ],
+                "prison": {
+                    "min": 15,
+                    "max": 30
+                }
             },
             "Article 201": {
                 "article": "Article 201",
-                "clauses": ["Murder by poisoning"],
-                "prison": {"min": 15, "max": 30}                          
+                "clauses": [
+                    "Murder by poisoning"
+                ],
+                "prison": {
+                    "min": 15,
+                    "max": 30
+                }
             },
             "Article 202": {
                 "article": "Article 202",
@@ -59,7 +125,10 @@
                     "against a person who is particularly vulnerable by reason of his or her illness or disability which is obvious or known to the perpetrator",
                     "against a public official in the performance of his or her duties or in connection therewith"
                 ],
-                "prison": {"min": 15, "max": 30}                          
+                "prison": {
+                    "min": 15,
+                    "max": 30
+                }
             },
             "Article 203": {
                 "article": "Article 203",
@@ -69,18 +138,49 @@
                     "against a victim or a civil party for reporting an offence or seeking reparation for harm suffered",
                     "against a witness for testifying at an investigation, a judicial investigation, a trial or in the proceedings of other complaints"
                 ],
-                "prison": {"min": 15, "max": 30}                          
+                "prison": {
+                    "min": 15,
+                    "max": 30
+                }
             },
             "Article 204": {
                 "article": "Article 204",
-                "clauses": ["committed by a public official in the performance of his or her duties or in connection therewith"],
-                "prison": {"min": 15, "max": 30}                          
+                "clauses": [
+                    "committed by a public official in the performance of his or her duties or in connection therewith"
+                ],
+                "prison": {
+                    "min": 15,
+                    "max": 30
+                }
             },
             "Article 205": {
                 "article": "Article 205",
-                "clauses": ["Murder preceded or followed by torture, cruelty or rape"],
-                "prison": {"min": 15, "max": 30}                          
+                "clauses": [
+                    "Murder preceded or followed by torture, cruelty or rape"
+                ],
+                "prison": {
+                    "min": 15,
+                    "max": 30
+                }
             }
-        }
+        },
+        "additional penalties": [
+            "Forfeiture of certain rights, either permanently or for a period not exceeding five years",
+            "Prohibition from practising a profession in the practice of or in connection with which the offence was committed, either permanently or for a period not exceeding five years",
+            "Prohibition from driving any motor vehicle permanently or for a period not exceeding five years",
+            "Local exclusion for a period not exceeding ten years for a felony or not exceeding five years for a misdemeanour",
+            "Prohibition from entering and residing in the territory of the Kingdom of Cambodia for a convicted foreigner, either permanently or for a period not exceeding five years",
+            "Confiscation of any instruments, materials or items which were used or intended to be used to commit the offence",
+            "Confiscation of the items or funds which were the subject of the offence",
+            "Confiscation of the proceeds or property arising out of the offence",
+            "Confiscation of the utensils, materials and furnishings in the premises in which the offence was committed",
+            "Confiscation of one or more vehicles belonging to the convicted person",
+            "Prohibition from possessing or carrying any weapon, explosive or ammunition of any kind",
+            "Closure of an establishment used to plan or to commit the offence, either permanently or for a period not exceeding five years",
+            "Prohibition from operating an establishment that is open to or used by the public, either permanently or for a period not exceeding five years",
+            "Publication of sentencing decision for a period not exceeding two months",
+            "Publication of sentencing decision in the print media",
+            "Broadcasting of sentencing decision by any audio-visual communication for a period not exceeding eight days"
+        ]
     }
 }
