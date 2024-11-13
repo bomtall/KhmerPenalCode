@@ -20,7 +20,7 @@ st.set_page_config(
 
 utils.add_sidebar_elements()
 
-with open("resources/data.json", "r") as f:
+with open("resources/data.json", "r", encoding="utf-8") as f:
     penal_dict = json.load(f)
 
 
@@ -45,8 +45,10 @@ crime=None
 sentence_guide = SentenceGuide()
 
 with row1[0]:
-    st.markdown("## 1. Offence")
-    crime_dropdown = st.selectbox("Select crime", list(penal_dict.keys()), index=None)
+    st.markdown("## 1. Offence / បទល្មើស")
+    #opts = list(penal_dict.keys())
+    #opts[1] += " / ឃាតកម្ម"
+    crime_dropdown = st.selectbox("Select crime",  list(penal_dict.keys()), index=None)
     
     if crime_dropdown:
         crime = Crime(penal_dict[crime_dropdown])
