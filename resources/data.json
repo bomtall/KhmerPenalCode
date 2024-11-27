@@ -1,6 +1,6 @@
 {
-    "Theft": {
-        "crime": "Theft",
+    "Theft / ចោរកម្ម": {
+        "crime": "Theft / ចោរកម្ម",
         "articles": [
             "Article 353",
             "Article 354"
@@ -8,8 +8,14 @@
         "clauses": [],
         "standard": {
             "prison": {
-                "min": 0.5,
-                "max": 3
+                "min": {
+                    "value": 6,
+                    "unit": "months"
+                },
+                "max": {
+                    "value": 3,
+                    "unit": "years"
+                }
             },
             "fine": {
                 "min": 1000000,
@@ -20,12 +26,18 @@
             "Article 357": {
                 "article": "Article 357",
                 "clauses": [
-                    "Committed by breaking and entering",
+                    "if it is commited by breaking or entering",
                     "Preceded, accompanied or followed by acts of violence"
                 ],
                 "prison": {
-                    "min": 3,
-                    "max": 10
+                    "min": {
+                        "value": 3,
+                        "unit": "years"
+                    },
+                    "max": {
+                        "value": 10,
+                        "unit": "years"
+                    }
                 }
             },
             "Article 358": {
@@ -34,8 +46,14 @@
                     "Preceded, accompanied or followed by acts of violence causing mutilation or permanent disability"
                 ],
                 "prison": {
-                    "min": 10,
-                    "max": 20
+                    "min": {
+                        "value": 10,
+                        "unit": "years"
+                    },
+                    "max": {
+                        "value": 20,
+                        "unit": "years"
+                    }
                 }
             },
             "Article 359": {
@@ -44,8 +62,14 @@
                     "Preceded, accompanied or followed by torture or acts of cruelty"
                 ],
                 "prison": {
-                    "min": 15,
-                    "max": 30
+                    "min": {
+                        "value": 15,
+                        "unit": "years"
+                    },
+                    "max": {
+                        "value": 30,
+                        "unit": "years"
+                    }
                 }
             },
             "Article 360": {
@@ -54,8 +78,14 @@
                     "Preceded, accompanied or followed by violence unintentionally causing the death of the victim."
                 ],
                 "prison": {
-                    "min": 15,
-                    "max": 30
+                    "min": {
+                        "value": 15,
+                        "unit": "years"
+                    },
+                    "max": {
+                        "value": 30,
+                        "unit": "years"
+                    }
                 }
             }
         },
@@ -78,8 +108,8 @@
             "Broadcasting of sentencing decision by any audio-visual communication for a period not exceeding eight days"
         ]
     },
-    "Murder": {
-        "crime": "Murder",
+    "Murder / ឃាតកម្ម": {
+        "crime": "Murder / ឃាតកម្ម",
         "articles": [
             "Article 199"
         ],
@@ -88,8 +118,14 @@
         ],
         "standard": {
             "prison": {
-                "min": 10,
-                "max": 15
+                "min": {
+                    "value": 10,
+                    "unit": "years"
+                },
+                "max": {
+                    "value": 15,
+                    "unit": "years"
+                }
             },
             "fine": {
                 "min": null,
@@ -103,8 +139,14 @@
                     "Murder committed with premeditation or by ambush"
                 ],
                 "prison": {
-                    "min": 15,
-                    "max": 30
+                    "min": {
+                        "value": 15,
+                        "unit": "years"
+                    },
+                    "max": {
+                        "value": 30,
+                        "unit": "years"
+                    }
                 }
             },
             "Article 201": {
@@ -113,8 +155,14 @@
                     "Murder by poisoning"
                 ],
                 "prison": {
-                    "min": 15,
-                    "max": 30
+                    "min": {
+                        "value": 15,
+                        "unit": "years"
+                    },
+                    "max": {
+                        "value": 30,
+                        "unit": "years"
+                    }
                 }
             },
             "Article 202": {
@@ -126,8 +174,14 @@
                     "against a public official in the performance of his or her duties or in connection therewith"
                 ],
                 "prison": {
-                    "min": 15,
-                    "max": 30
+                    "min": {
+                        "value": 15,
+                        "unit": "years"
+                    },
+                    "max": {
+                        "value": 30,
+                        "unit": "years"
+                    }
                 }
             },
             "Article 203": {
@@ -139,8 +193,14 @@
                     "against a witness for testifying at an investigation, a judicial investigation, a trial or in the proceedings of other complaints"
                 ],
                 "prison": {
-                    "min": 15,
-                    "max": 30
+                    "min": {
+                        "value": 15,
+                        "unit": "years"
+                    },
+                    "max": {
+                        "value": 30,
+                        "unit": "years"
+                    }
                 }
             },
             "Article 204": {
@@ -149,8 +209,14 @@
                     "committed by a public official in the performance of his or her duties or in connection therewith"
                 ],
                 "prison": {
-                    "min": 15,
-                    "max": 30
+                    "min": {
+                        "value": 15,
+                        "unit": "years"
+                    },
+                    "max": {
+                        "value": 30,
+                        "unit": "years"
+                    }
                 }
             },
             "Article 205": {
@@ -159,8 +225,14 @@
                     "Murder preceded or followed by torture, cruelty or rape"
                 ],
                 "prison": {
-                    "min": 15,
-                    "max": 30
+                    "min": {
+                        "value": 15,
+                        "unit": "years"
+                    },
+                    "max": {
+                        "value": 30,
+                        "unit": "years"
+                    }
                 }
             }
         },
