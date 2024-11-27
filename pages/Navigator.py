@@ -302,7 +302,7 @@ with row9[1]:
 
 with row9[2]:
     if crime:
-        if sentence_guide.community_service != True and sentence_guide.offer_to_reprimand != True:
+        if sentence_guide.community_service != True:
             st.markdown("If imprisonment or fine what is the sentence the Court intends to pass before consideration of suspending the sentence in whole or part (Stage 6)?")
             if sentence_guide.current_min_sentence.value > 1 and sentence_guide.current_min_sentence.unit == "years":
                 years = st.number_input(label="Years", min_value=sentence_guide.current_min_sentence.value, max_value=sentence_guide.current_max_sentence.value)
@@ -314,15 +314,21 @@ with row9[2]:
             days = st.number_input(label="Days", min_value=0, max_value=7, step=1)
     
             sum = years+(months/12)+(weeks/52)+(days/365)
-            fine_input = st.slider(label="Enter the intended fine amount", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine), format='៛%d')
             if sum > sentence_guide.current_max_sentence.convert_to_years() or sum < sentence_guide.current_min_sentence.convert_to_years():
                 st.markdown(":red[Outside of guideline range]")
             else:
                 sentence_input = Sentence(sum, "years")
                 st.markdown(f"Sentence: {sentence_input.get_sentence_str()}")
-                st.markdown(f"Fine: ៛{millify.millify(fine_input)}")
                 sentence_guide.intended_sentence = sentence_input
+            fine_bool = st.checkbox(label="Intend to fine?")
+            if fine_bool:
+                fine_input = st.number_input(label="Enter the intended fine amount", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine))
+                fine_slider = st.slider(label="Enter the intended fine amount", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine), format='៛%d', value=fine_input, disabled=True)
+                st.markdown(f"Fine: ៛{millify.millify(fine_input)}")
                 sentence_guide.intended_fine = fine_input
+            else:
+                sentence_guide.intended_fine = 0
+                
                 
         
 with row10[0]:
