@@ -294,13 +294,13 @@ with row9[0]:
                 sentence_guide.community_service = False
             
 
-with row9[1]:
+with row9[2]:
     if sentence_guide.community_service == False:
         if sentence_guide.possible_to_reprimand():
             offer_to_reprimand = st.selectbox(label="Offer to suspend Sentence in full or in part (as well as fine)", options=["Yes", "No"], index=None)
             sentence_guide.offer_to_reprimand = bool_dict[offer_to_reprimand]
 
-with row9[2]:
+with row9[1]:
     if crime:
         if sentence_guide.community_service != True:
             st.markdown("If imprisonment or fine what is the sentence the Court intends to pass before consideration of suspending the sentence in whole or part (Stage 6)?")
@@ -337,7 +337,7 @@ with row10[0]:
 with row11[0]:
     st.markdown("## 6. Suspended sentences")
     st.markdown("Is the sentence to be passed at section 5 for the current offence less than 5 years (and a fine)?")
-    if sentence_guide.current_min_sentence:
+    if sentence_guide.offer_to_reprimand:
         if sentence_guide.possible_to_reprimand():
             suspend_whole_sentence = st.selectbox(label="Is the prison sentence to be suspended in whole?", options=["Yes", "No"], index=None)
             if suspend_whole_sentence == "No":
@@ -350,7 +350,7 @@ with row11[0]:
                 
 with row11[1]:
     st.markdown("##")
-    if sentence_guide.current_min_sentence:
+    if sentence_guide.offer_to_reprimand and fine_bool:
         if sentence_guide.possible_to_reprimand():
             suspend_whole_fine = st.selectbox(label="Is the fine to be suspended in whole?", options=["Yes", "No"], index=None)
             if suspend_whole_fine == "Yes":
@@ -380,7 +380,7 @@ with row14[0]:
 
 with row15[0]:
     st.markdown("## 8. Final sentence")
-    if sentence_guide.community_service or sentence_guide.intended_sentence or sentence_guide.offer_to_reprimand:
+    if sentence_guide.community_service or sentence_guide.intended_sentence:
         st.markdown(f"Final sentence: {sentence_guide.intended_sentence.get_sentence_str()} {"SUSPENDED" + " " + sentence_guide.sentence_amount_to_suspend.get_sentence_str() if sentence_guide.sentence_amount_to_suspend else ""} {"SUSPENDED" if sentence_guide.sentence_suspended else ""}")
         st.download_button(label="Download Report", data=f"Final sentence: {sentence_guide.intended_sentence.get_sentence_str()} {"SUSPENDED" if sentence_guide.sentence_suspended else ""}", file_name=None)
         output_str = """
