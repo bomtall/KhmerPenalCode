@@ -1,6 +1,7 @@
 import streamlit as st
 import src.utils as utils
 import math
+import datetime as dt
 
 
 class Sentence:
@@ -8,7 +9,7 @@ class Sentence:
         self.unit = unit
         self.value = value
         
-        if self.unit == "years":
+        if unit == "years":
             match value:
                 case v if v < 1/52:
                     self.unit = "days"
@@ -66,6 +67,7 @@ class SentenceGuide:
         self.current_max_fine = None
         self.agg_max_sentence = None
         self.agg_min_sentence = None
+        self.aggrevation = None
         self.prev_conviction = None
         self.prev_conviction_pardon = None
         self.prev_conviction_type = None
@@ -84,12 +86,14 @@ class SentenceGuide:
         self.sentence_suspended = None
         self.fine_suspended = None
         self.sentence_amount_to_suspend = None
+        self.fine_amount_to_suspend = None
+        self.intended_sentence_str=None
         
 
     def initialise_with_crime(self, crime_obj: Crime) -> None:
         self.crime = crime_obj
-        self.current_max_sentence = self.set_current_max_sentence(Sentence(self.crime.standard_max_sentence.value, self.crime.standard_max_sentence.unit))
-        self.current_min_sentence = self.set_current_min_sentence(Sentence(self.crime.standard_min_sentence.value, self.crime.standard_min_sentence.unit))
+        self.current_max_sentence = self.set_current_max_sentence(self.crime.standard_max_sentence)
+        self.current_min_sentence = self.set_current_min_sentence(self.crime.standard_min_sentence)
         self.current_min_fine = self.crime.standard_min_fine
         self.current_max_fine = self.crime.standard_max_fine
         
@@ -106,11 +110,11 @@ class SentenceGuide:
         if aggrevation == "None":
             #if self.current_max_sentence > self.crime.standard_max_sentence:
             self.set_current_max_sentence(self.crime.standard_max_sentence)
-            self.agg_max_sentence = 0
+            sentence = self.crime.standard_max_sentence
         else:
             sentence = Sentence(self.crime.aggrevations[aggrevation]["prison"]["max"]["value"], self.crime.aggrevations[aggrevation]["prison"]["max"]["unit"])
-            self.agg_max_sentence = sentence
-            self.set_current_max_sentence(sentence)           
+            self.set_current_max_sentence(sentence)
+        self.agg_max_sentence = sentence
 
     def set_agg_min_sentence(self, aggrevation: str) -> None:
         if aggrevation == "None":
@@ -141,12 +145,12 @@ class SentenceGuide:
             
         elif self.current_min_sentence.unit == "days":
             match self.current_min_sentence.value:
-                case cms if cms > 6:
+                case cms if 730 > cms > 6:
                     new_min_sentence = Sentence(1, "days")
-                case cms if cms < 6:
-                    new_min_sentence = Sentence(0, "days")
+                # case cms if cms < 6:
+                #     new_min_sentence = Sentence(1, "days")
         else:
-            new_min_sentence = Sentence(0, "days")
+            new_min_sentence = Sentence(1, "days")
         
         diff = utils.create_sentence_period(new_min_sentence.convert_to_years() - self.current_min_sentence.convert_to_years())
         self.set_current_min_sentence(new_min_sentence)
@@ -161,7 +165,49 @@ class SentenceGuide:
                 return True
         else:
             return False
+    
+    def generate_report(self):
+        report = f"""
+Sentence Guidelines Report
+
+Report Date: {dt.datetime.today().strftime('%d/%m/%Y %H:%M:%S')}
+
+Sentence guideline maximum: {self.current_max_sentence.get_sentence_str()}
+Sentence guideline minimum: {self.current_min_sentence.get_sentence_str()}
+
+"""
+        if self.intended_sentence:
+            
+            report += f"""
+Final sentence: {self.intended_sentence_str} {" - Wholly Suspended" if self.sentence_suspended else ""}
+{"\nPart Suspended: " + str(self.sentence_amount_to_suspend.get_sentence_str()) if self.sentence_amount_to_suspend else ""}
+
+Final fine: ៛{'{:,.2f}'.format(self.intended_fine)} {" - Wholly Suspended" if self.fine_suspended else ""}
+{"\nPart Suspended: ៛" + str('{:,.2f}'.format(self.fine_amount_to_suspend)) if self.fine_amount_to_suspend else ""}
+        """
+    
+        elif self.community_service:
+            report += f"""
+Community Service awarded
+
+Community service hours: {self.community_service_hours}
+Community service months to complete: {self.community_service_timeframe}
+        """
         
+        if self.aggrevation:
+            report += f"""
+Aggrevation: \n {self.aggrevation + "\n " + "\n ".join(self.crime.aggrevations[self.aggrevation]["clauses"])}
+            """
+        
+        if self.prev_conviction:
+            report += f"""
+Previous convictions: {str(self.prev_conviction)}
+Type: {self.prev_conviction_type}
+Pardoned: {str(self.prev_conviction_pardon)}
+Special reasons not to revoke a prior suspended sentence: {self.special_revoke_reasons}
+        """
+        
+        return report
     
     
         
