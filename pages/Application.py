@@ -72,6 +72,7 @@ row16 = st.columns((1,1))
 
 crime=None
 sentence_guide = SentenceGuide()
+
 if "current_max_s" not in st.session_state:
     st.session_state["current_max_s"] = 0
 if "current_min_s" not in st.session_state:
@@ -84,12 +85,14 @@ with row1[0]:
     if crime_dropdown:
         crime = Crime(penal_dict[crime_dropdown])
         sentence_guide.initialise_with_crime(crime)
-
+        
 with row1[1]:
     st.markdown("#### Standard sentences ប្រយោគស្តង់ដារ")
     if crime_dropdown:
         st.metric(label="Max prison sentence ទោសជាប់ពន្ធនាគារអតិបរមា", value=crime.standard_max_sentence.get_sentence_str())
         st.metric(label="Min prison sentence ទោសដាក់ពន្ធនាគារអប្បបរមា", value=crime.standard_min_sentence.get_sentence_str())
+        st.session_state["current_max_s"] = crime.standard_max_sentence.get_sentence_str()
+        st.session_state["current_min_s"] = crime.standard_min_sentence.get_sentence_str()
 
 with row1[2]:
     st.markdown("#### Standard fines ការផាកពិន័យស្តង់ដារ")
@@ -106,11 +109,12 @@ def update_radio():
     
 with row3[0]:
     st.markdown("## 2. Aggravating circumstances")
-    st.markdown("Only one or none of the three options can apply. If any applicable, then select the most serious")
+    st.markdown(
+        "Only one or none of the four aggravating circumstances need to be applied. If more than one aggravating circumstance applies, select the most serious. The options are ranked in order of height of seriousness.")
     aggrevations_radio = st.radio(
         label="Select the most severe article that applies or none",
-        options=crime.aggrevation_articles + ["None"] if crime else [None],
-        captions=crime.aggrevation_clauses + ["None"] if crime else [None],
+        options=crime.aggrevation_articles[::-1]+["None"]  if crime else [None],
+        captions=crime.aggrevation_clauses[::-1]+["None"] if crime else [None],
         index=None,
         on_change=update_radio
         )
@@ -118,38 +122,45 @@ with row3[0]:
 if crime and aggrevations_radio:
     sentence_guide.set_agg_max_sentence(aggrevations_radio)
     sentence_guide.set_agg_min_sentence(aggrevations_radio)
+    if aggrevations_radio != "None":
+        sentence_guide.aggrevation = aggrevations_radio
    
     #st.session_state.top_bar. = f"### Current max sentence: {sentence_guide.current_max_sentence}. Current min sentence: {sentence_guide.current_min_sentence}", key="top_bar"
     
 with row3[1]:
-    if sentence_guide.agg_max_sentence:   
-        st.metric(
-            label="Aggrevated maximum sentence",
-            value=sentence_guide.agg_max_sentence.get_sentence_str(),
-            delta=None,
-            delta_color="inverse"
-        )
+    if sentence_guide.agg_max_sentence:
+        if not sentence_guide.agg_max_sentence.value == sentence_guide.crime.standard_max_sentence.value:   
+            st.metric(
+                label="Aggrevated maximum sentence",
+                value=sentence_guide.agg_max_sentence.get_sentence_str(),
+                delta=None,
+                delta_color="inverse"
+            )
 
 with row3[2]:
     if sentence_guide.agg_min_sentence:
-        st.metric(
-            label="Aggrevated minimum sentence",
-            value=sentence_guide.agg_min_sentence.get_sentence_str(),
-            delta=None,
-            delta_color="inverse"
-        )
+        if not sentence_guide.agg_min_sentence.value == sentence_guide.crime.standard_min_sentence.value:
+            st.metric(
+                label="Aggrevated minimum sentence",
+                value=sentence_guide.agg_min_sentence.get_sentence_str(),
+                delta=None,
+                delta_color="inverse"
+            )
         
 with row4[0]:
     st.markdown('---')
-    
 
 with row5[0]:
     st.markdown("## 3. Previous convictions")
     
     if crime and aggrevations_radio:
-        prev_conviction = st.selectbox(label="Does the indictment cite the previous conviction?", options=["Yes", "No"], index=None)
+        prev_conviction = st.selectbox(label="Does the offender have any previous convictions?", options=["Yes", "No"], index=None)
         if prev_conviction == "Yes":
-            sentence_guide.prev_conviction = True
+            cite_prev_conviction = st.selectbox(label="Does the indictment cite the previous conviction?", options=["Yes", "No"], index=None)
+            if prev_conviction == "Yes" and cite_prev_conviction == "Yes":
+                sentence_guide.prev_conviction = True
+            elif cite_prev_conviction == "No":
+                sentence_guide.prev_conviction = False
         elif prev_conviction == "No":
             sentence_guide.prev_conviction = False
         
@@ -294,11 +305,7 @@ with row9[0]:
                 sentence_guide.community_service = False
             
 
-with row9[2]:
-    if sentence_guide.community_service == False:
-        if sentence_guide.possible_to_reprimand():
-            offer_to_reprimand = st.selectbox(label="Offer to suspend Sentence in full or in part (as well as fine)", options=["Yes", "No"], index=None)
-            sentence_guide.offer_to_reprimand = bool_dict[offer_to_reprimand]
+
 
 with row9[1]:
     if crime:
@@ -318,16 +325,21 @@ with row9[1]:
                 st.markdown(":red[Outside of guideline range]")
             else:
                 sentence_input = Sentence(sum, "years")
-                st.markdown(f"Sentence: {sentence_input.get_sentence_str()}")
+                st.markdown(f"Sentence: {int(years)} years, {months} months, {weeks} weeks, {days} days")
                 sentence_guide.intended_sentence = sentence_input
-            fine_bool = st.checkbox(label="Intend to fine?")
-            if fine_bool:
-                fine_input = st.number_input(label="Enter the intended fine amount", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine))
-                fine_slider = st.slider(label="Enter the intended fine amount", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine), format='៛%d', value=fine_input, disabled=True)
-                st.markdown(f"Fine: ៛{millify.millify(fine_input)}")
-                sentence_guide.intended_fine = fine_input
-            else:
-                sentence_guide.intended_fine = 0
+                sentence_guide.intended_sentence_str = f"{int(years)} years, {months} months, {weeks} weeks, {days} days"
+
+                
+with row9[2]:
+    
+    fine_bool = st.checkbox(label="Intend to fine?")
+    if fine_bool:
+        fine_input = st.number_input(label="Enter the intended fine amount", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine))
+        fine_slider = st.slider(label="Enter the intended fine amount", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine), format='៛%d', value=fine_input, disabled=True)
+        st.markdown(f"Fine: ៛{millify.millify(fine_input)}")
+        sentence_guide.intended_fine = fine_input
+    else:
+        sentence_guide.intended_fine = 0
                 
                 
         
@@ -337,18 +349,24 @@ with row10[0]:
 with row11[0]:
     st.markdown("## 6. Suspended sentences")
     st.markdown("Is the sentence to be passed at section 5 for the current offence less than 5 years (and a fine)?")
-    if sentence_guide.offer_to_reprimand:
-        if sentence_guide.possible_to_reprimand():
-            suspend_whole_sentence = st.selectbox(label="Is the prison sentence to be suspended in whole?", options=["Yes", "No"], index=None)
-            if suspend_whole_sentence == "No":
-                st.markdown("How much to suspend?")
-                suspend_unit = st.selectbox(label="Unit", options=["years", "months", "weeks", "days"])
-                suspend_amount = st.number_input(label="Amount", step=1)
-                sentence_guide.sentence_amount_to_suspend = Sentence(suspend_amount, suspend_unit)
-            if suspend_whole_sentence == "Yes":
-                sentence_guide.sentence_suspended = True
-                
+    if sentence_guide.possible_to_reprimand() and sentence_guide.intended_sentence:
+        if not sentence_guide.community_service and sentence_guide.intended_sentence.value <  5:
+            offer_to_reprimand = st.selectbox(label="Offer to suspend Sentence in full or in part (as well as fine)", options=["Yes", "No"], index=None)
+            sentence_guide.offer_to_reprimand = bool_dict[offer_to_reprimand]
+            
 with row11[1]:
+    st.markdown("##")
+    if sentence_guide.offer_to_reprimand:
+        suspend_whole_sentence = st.selectbox(label="Is the prison sentence to be suspended in whole?", options=["Yes", "No"], index=None)
+        if suspend_whole_sentence == "No":
+            st.markdown("How much to suspend?")
+            suspend_unit = st.selectbox(label="Unit", options=["years", "months", "weeks", "days"])
+            suspend_amount = st.number_input(label="Amount", step=1)
+            sentence_guide.sentence_amount_to_suspend = Sentence(suspend_amount, suspend_unit)
+        if suspend_whole_sentence == "Yes":
+            sentence_guide.sentence_suspended = True
+                
+with row11[2]:
     st.markdown("##")
     if sentence_guide.offer_to_reprimand and fine_bool:
         if sentence_guide.possible_to_reprimand():
@@ -356,7 +374,8 @@ with row11[1]:
             if suspend_whole_fine == "Yes":
                 sentence_guide.fine_suspended = True
             elif suspend_whole_fine == "No":
-                fine_amount_to_suspend = st.slider(label="Amount to suspend", min_value=0, max_value=sentence_guide.current_max_fine, format='៛%d')
+                fine_amount_to_suspend = st.slider(label="Amount to suspend", min_value=0.0, max_value=float(sentence_guide.intended_fine), format='៛%d')
+                sentence_guide.fine_amount_to_suspend = fine_amount_to_suspend
             
 
 with row12[0]:
@@ -370,28 +389,27 @@ with row13[0]:
         for penalty in add_penalties:
             st.markdown(f"**{penalty}**")
             u = st.selectbox(label="Unit", options=["years", "months", "weeks", "days"], key="unit"+penalty)
-            t = st.number_input(label="Enter given term", step=1, key="amount-" +penalty)
+            t = st.number_input(label="Enter given term", step=1, key="amount-" + penalty)
             additional_penalties_list.append([penalty, t, u])
-        sentence_guide.additional_penalties = additional_penalties_list
-            
+        sentence_guide.additional_penalties = additional_penalties_list    
         
 with row14[0]:
     st.markdown('---')
 
 with row15[0]:
     st.markdown("## 8. Final sentence")
-    if sentence_guide.community_service or sentence_guide.intended_sentence:
-        st.markdown(f"Final sentence: {sentence_guide.intended_sentence.get_sentence_str()} {"SUSPENDED" + " " + sentence_guide.sentence_amount_to_suspend.get_sentence_str() if sentence_guide.sentence_amount_to_suspend else ""} {"SUSPENDED" if sentence_guide.sentence_suspended else ""}")
-        st.download_button(label="Download Report", data=f"Final sentence: {sentence_guide.intended_sentence.get_sentence_str()} {"SUSPENDED" if sentence_guide.sentence_suspended else ""}", file_name=None)
-        output_str = """
-        Final sentence
-        """
-    
+    if sentence_guide.intended_sentence or sentence_guide.community_service:
+        data = sentence_guide.generate_report()
+        st.markdown(data)
+        st.download_button(label="Download Report", data=data, file_name="Sentence Guidelines Report.txt")
+
 with row16[0]:
     st.markdown('---')
     
 with st.sidebar:
     st.text_input(label="Current max sentence", value=st.session_state["current_max_s"], disabled=True)
     st.text_input(label="Current min sentence", value=st.session_state["current_min_s"], disabled=True)
+    
+
     
     
