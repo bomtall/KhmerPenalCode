@@ -349,10 +349,11 @@ with row10[0]:
 with row11[0]:
     st.markdown("## 6. Suspended sentences")
     st.markdown("Is the sentence to be passed at section 5 for the current offence less than 5 years (and a fine)?")
-    if sentence_guide.possible_to_reprimand() and sentence_guide.intended_sentence:
-        if not sentence_guide.community_service and sentence_guide.intended_sentence.value <  5:
-            offer_to_reprimand = st.selectbox(label="Offer to suspend Sentence in full or in part (as well as fine)", options=["Yes", "No"], index=None)
-            sentence_guide.offer_to_reprimand = bool_dict[offer_to_reprimand]
+    if sentence_guide.intended_sentence:
+        if sentence_guide.possible_to_reprimand() and sentence_guide.intended_sentence:
+            if not sentence_guide.community_service and sentence_guide.intended_sentence.value <  5:
+                offer_to_reprimand = st.selectbox(label="Offer to suspend Sentence in full or in part (as well as fine)", options=["Yes", "No"], index=None)
+                sentence_guide.offer_to_reprimand = bool_dict[offer_to_reprimand]
             
 with row11[1]:
     st.markdown("##")
