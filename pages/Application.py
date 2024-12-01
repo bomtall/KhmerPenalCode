@@ -377,10 +377,11 @@ with row16[0]:
     
 with st.sidebar:
     st.markdown("### Guidelines")
-    st.markdown(f"Current max sentence: **{sentence_guide.current_max_sentence.get_sentence_str()}**")
-    st.markdown(f"Current min sentence: **{sentence_guide.current_min_sentence.get_sentence_str()}**")
-    st.markdown(f"Current max fine: **៛{millify.millify(sentence_guide.current_max_fine)}**")
-    st.markdown(f"Current min fine: **៛{millify.millify(sentence_guide.current_min_fine)}**")
+    if crime:
+        st.markdown(f"Current max sentence: **{sentence_guide.current_max_sentence.get_sentence_str()}**")
+        st.markdown(f"Current min sentence: **{sentence_guide.current_min_sentence.get_sentence_str()}**")
+        st.markdown(f"Current max fine: **៛{millify.millify(sentence_guide.current_max_fine)}**")
+        st.markdown(f"Current min fine: **៛{millify.millify(sentence_guide.current_min_fine)}**")
     
 st.link_button(
     label="Khmer Penal Code Sentencing Application Feedback. មតិកែលម្អឧបករណ៍ប្រយោគខ្មែរ",
