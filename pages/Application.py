@@ -32,30 +32,11 @@ bool_dict = {
 with open("resources/data.json", "r", encoding="utf-8") as f:
     penal_dict = json.load(f)
     
-    
-# initialize float feature/capability
-# float_init()
-    
-# row0 = st.columns((1,1))
-# row0[0].float("top: 0.15rem;z-index: 999990; background-color: ")
-# row0[1].float("top: 0.15rem;z-index: 999990; background-color: ")
 
-# style = '''<style>
-# .floating a {
-#     color: var(--default-textColor);
-#     opacity: 0.4;
-#     text-decoration: none;
-# }
-# .floating a:hover {
-#     color: var(--default-textColor)!important;
-#     opacity: 1;
-# }
-# </style>'''
-# st.markdown(style, unsafe_allow_html=True)
-
+row0 = st.columns((1))
 row1 = st.columns((1,1,1), gap="medium")
 row2 = st.columns(1)
-row3 = st.columns((2,1,1), gap="medium")
+row3 = st.columns((1), gap="medium")
 row4 = st.columns(1)
 row5 = st.columns((1,1,1), gap="medium")
 row6 = st.columns(1)
@@ -78,9 +59,10 @@ if "current_max_s" not in st.session_state:
 if "current_min_s" not in st.session_state:
     st.session_state["current_min_s"] = 0
 
-with row1[0]:
+with row0[0]:
     st.markdown("## 1. Offence / បទល្មើស")
-    crime_dropdown = st.selectbox("Select crime",  list(penal_dict.keys()), index=None)
+with row1[0]:
+    crime_dropdown = st.selectbox("Select crime / ជ្រើសរើសបទឧក្រិដ្ឋ",  list(penal_dict.keys()), index=None)
     
     if crime_dropdown:
         crime = Crime(penal_dict[crime_dropdown])
@@ -93,7 +75,8 @@ with row1[1]:
         st.metric(label="Min prison sentence ទោសដាក់ពន្ធនាគារអប្បបរមា", value=crime.standard_min_sentence.get_sentence_str())
         st.session_state["current_max_s"] = crime.standard_max_sentence.get_sentence_str()
         st.session_state["current_min_s"] = crime.standard_min_sentence.get_sentence_str()
-
+    
+    
 with row1[2]:
     st.markdown("#### Standard fines ការផាកពិន័យស្តង់ដារ")
     if crime and crime.standard_max_fine:
@@ -102,17 +85,17 @@ with row1[2]:
 
 with row2[0]:
     st.markdown('---')
+    st.markdown("## 2. Aggravating circumstances / ស្ថានការណ៍កាន់តែធ្ងន់ធ្ងរ")
     
 aggrevations_radio = None
 def update_radio():
     st.session_state["current_max_s"] = aggrevations_radio
     
 with row3[0]:
-    st.markdown("## 2. Aggravating circumstances")
     st.markdown(
-        "Only one or none of the four aggravating circumstances need to be applied. If more than one aggravating circumstance applies, select the most serious. The options are ranked in order of height of seriousness.")
+        "Only one or none of the aggravating circumstances need to be applied. If more than one aggravating circumstance applies, select the most serious. The options are ranked in order of height of seriousness.  \n / មានតែកាលៈទេសៈមួយ ឬគ្មានស្ថានទម្ងន់ទោសប៉ុណ្ណោះដែលត្រូវអនុវត្ត។ ប្រសិនបើ​មាន​ស្ថាន​ទម្ងន់​ទោស​ច្រើន​ជាង​មួយ សូម​ជ្រើសរើស​ករណី​ធ្ងន់ធ្ងរ​បំផុត។")
     aggrevations_radio = st.radio(
-        label="Select the most severe article that applies or none",
+        label="",
         options=crime.aggrevation_articles[::-1]+["None"]  if crime else [None],
         captions=crime.aggrevation_clauses[::-1]+["None"] if crime else [None],
         index=None,
@@ -124,39 +107,19 @@ if crime and aggrevations_radio:
     sentence_guide.set_agg_min_sentence(aggrevations_radio)
     if aggrevations_radio != "None":
         sentence_guide.aggrevation = aggrevations_radio
-   
-    #st.session_state.top_bar. = f"### Current max sentence: {sentence_guide.current_max_sentence}. Current min sentence: {sentence_guide.current_min_sentence}", key="top_bar"
-    
-with row3[1]:
-    if sentence_guide.agg_max_sentence:
-        if not sentence_guide.agg_max_sentence.value == sentence_guide.crime.standard_max_sentence.value:   
-            st.metric(
-                label="Aggrevated maximum sentence",
-                value=sentence_guide.agg_max_sentence.get_sentence_str(),
-                delta=None,
-                delta_color="inverse"
-            )
 
-with row3[2]:
-    if sentence_guide.agg_min_sentence:
-        if not sentence_guide.agg_min_sentence.value == sentence_guide.crime.standard_min_sentence.value:
-            st.metric(
-                label="Aggrevated minimum sentence",
-                value=sentence_guide.agg_min_sentence.get_sentence_str(),
-                delta=None,
-                delta_color="inverse"
-            )
         
 with row4[0]:
     st.markdown('---')
+    st.markdown("## 3. Previous convictions / ការផ្តន្ទាទោសពីមុន")
 
 with row5[0]:
-    st.markdown("## 3. Previous convictions")
+    
     
     if crime and aggrevations_radio:
-        prev_conviction = st.selectbox(label="Does the offender have any previous convictions?", options=["Yes", "No"], index=None)
+        prev_conviction = st.selectbox(label="Does the offender have any previous convictions? / តើ​ជន​ល្មើស​មាន​ការ​ផ្ដន្ទាទោស​មុន​ទេ?", options=["Yes", "No"], index=None)
         if prev_conviction == "Yes":
-            cite_prev_conviction = st.selectbox(label="Does the indictment cite the previous conviction?", options=["Yes", "No"], index=None)
+            cite_prev_conviction = st.selectbox(label="Does the indictment cite the previous conviction? / តើ​ដីកា​ចោទ​ប្រកាន់​លើក​មុន​ឬ​ទេ?", options=["Yes", "No"], index=None)
             if prev_conviction == "Yes" and cite_prev_conviction == "Yes":
                 sentence_guide.prev_conviction = True
             elif cite_prev_conviction == "No":
@@ -234,7 +197,7 @@ with row5[2]:
         
     if sentence_guide.final_judgement_in_5y and sentence_guide.prev_conviction_type == "Misdemeanour":
         prev_conviction_theft_trust_fraud = st.selectbox(
-            label="Was the previous conviction for: Theft, breach of trust or fraud?",
+            label="Was the previous conviction for: Theft, breach of trust or fraud? / តើការកាត់ទោសពីមុនសម្រាប់៖ លួច រំលោភលើទំនុកចិត្ត ឬការក្លែងបន្លំ?",
             options=["Yes", "No"],
             index=None
         )
@@ -257,10 +220,12 @@ with row5[2]:
 
 with row6[0]:
     st.markdown('---')
-
+    st.markdown("## 4. Mitigating circumstances / កាលៈទេសៈបន្ធូរបន្ថយ")
+    
 with row7[0]:
-    st.markdown("## 4. Mitigating circumstances")
-    mitigations = st.selectbox(label="Are there mitigating circumstances warranted by the nature of the offence or the character of the accused?", options=["Yes", "No"], index=None)
+    mitigations = st.selectbox(
+        label="Are there mitigating circumstances warranted by the nature of the offence or the character of the accused? / តើមានកាលៈទេសៈបន្ធូរបន្ថយដែលធានាដោយលក្ខណៈនៃបទល្មើស ឬចរិតលក្ខណៈរបស់ជនជាប់ចោទ?",
+        options=["Yes", "No"], index=None)
     if mitigations == "Yes":
         basis_of_mitigations = st.text_area(label="Court to enter basis of finding mitigating circumstances")
         if basis_of_mitigations:
@@ -288,9 +253,9 @@ if mitigations == "Yes":
 
 with row8[0]:
     st.markdown('---')
+    st.markdown("## 5. Initial prison & fine determination / ពន្ធនាគារដំបូង និងការកំណត់ការផាកពិន័យ")
 
 with row9[0]:
-    st.markdown("## 5. Initial prison & fine determination")
     if sentence_guide.current_max_sentence != None:
         if sentence_guide.current_max_sentence.unit == "years" and sentence_guide.current_max_sentence.value <= 3:
             st.markdown("If the maximum at this stage is not more than 3 years imprisonment consider community service or a reprimand (Articles 72 & 76) No fine or imprisonment allowed alongside.")
@@ -309,7 +274,7 @@ with row9[0]:
 
 with row9[1]:
     if crime:
-        if sentence_guide.community_service != True:
+        if sentence_guide.community_service != True and sentence_guide.current_min_sentence:
             st.markdown("If imprisonment or fine what is the sentence the Court intends to pass before consideration of suspending the sentence in whole or part (Stage 6)?")
             if sentence_guide.current_min_sentence.value > 1 and sentence_guide.current_min_sentence.unit == "years":
                 years = st.number_input(label="Years", min_value=sentence_guide.current_min_sentence.value, max_value=sentence_guide.current_max_sentence.value)
@@ -345,9 +310,10 @@ with row9[2]:
         
 with row10[0]:
     st.markdown('---')
+    st.markdown("## 6. Suspended sentences / ប្រយោគដែលផ្អាក")
 
 with row11[0]:
-    st.markdown("## 6. Suspended sentences")
+    
     st.markdown("Is the sentence to be passed at section 5 for the current offence less than 5 years (and a fine)?")
     if sentence_guide.intended_sentence:
         if sentence_guide.possible_to_reprimand() and sentence_guide.intended_sentence:
@@ -381,9 +347,10 @@ with row11[2]:
 
 with row12[0]:
     st.markdown('---')
+    st.markdown("## 7. Additional penalties / ការពិន័យបន្ថែម")
 
 with row13[0]:
-    st.markdown("## 7. Additional penalties")
+    
     if crime:
         add_penalties = st.multiselect(label="Select any number of additional penalties", options=crime.additional_penalties)
         additional_penalties_list = []
@@ -396,9 +363,10 @@ with row13[0]:
         
 with row14[0]:
     st.markdown('---')
+    st.markdown("## 8. Final sentence / ប្រយោគចុងក្រោយ")
 
 with row15[0]:
-    st.markdown("## 8. Final sentence")
+    
     if sentence_guide.intended_sentence or sentence_guide.community_service:
         data = sentence_guide.generate_report()
         st.markdown(data)
@@ -408,8 +376,16 @@ with row16[0]:
     st.markdown('---')
     
 with st.sidebar:
-    st.text_input(label="Current max sentence", value=st.session_state["current_max_s"], disabled=True)
-    st.text_input(label="Current min sentence", value=st.session_state["current_min_s"], disabled=True)
+    st.markdown("### Guidelines")
+    st.markdown(f"Current max sentence: **{sentence_guide.current_max_sentence.get_sentence_str()}**")
+    st.markdown(f"Current min sentence: **{sentence_guide.current_min_sentence.get_sentence_str()}**")
+    st.markdown(f"Current max fine: **៛{millify.millify(sentence_guide.current_max_fine)}**")
+    st.markdown(f"Current min fine: **៛{millify.millify(sentence_guide.current_min_fine)}**")
+    
+st.link_button(
+    label="Khmer Penal Code Sentencing Application Feedback. មតិកែលម្អឧបករណ៍ប្រយោគខ្មែរ",
+    url="https://docs.google.com/forms/d/e/1FAIpQLSdMB3MTujcwtQRvStg4O1XwrkUN_hu1b1dLLQfTKmA0n8gPbA/viewform"
+)
     
 
     
