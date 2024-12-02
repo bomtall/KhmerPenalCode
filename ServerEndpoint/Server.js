@@ -13,37 +13,47 @@ const connectionConfig = {
 };
 
 //Here we create a connection pool to help with the connection to the database
-var pool  = mysql.createPool(connectionConfig);
+var pool = mysql.createPool(connectionConfig);
 
 
 //We also allow the application to use json as the data format
 app.use(express.json());
 
-
-// Connect to the database
-db.connect((err) => {
+// Start the server
+app.listen(port, function (err) {
     if (err) {
-        throw err;
+        console.log("Error in server setup");
+    } else {
+        console.log(`Server running on port ${port}`);
     }
-    console.log('Connected to database');
 });
 
 // Define a GET endpoint to query the database
 app.get('/get-crimes', (req, res) => {
     var ID = req.query.ID;
-    let sql = 'SELECT * FROM crimes'; // Replace 'your_table_name' with your actual table name
-    db.query(sql, (err, results) => {
+
+    pool.getConnection(function (err, connection) {
         if (err) {
-            return res.status(500).send(err);
+            console.log(err);
         }
-        res.json(results);
+
+        let sql = 'SELECT * FROM crime'; // Replace 'your_table_name' with your actual table name
+        connection.query(sql, function (err, results) {
+            if (err) {
+                console.log("Error: " + err);
+                connection.release();
+                return res.status(500).send(err);
+            }
+            res.status(200).json(results);
+            connection.release();
+        });
     });
 });
 
 
-app.get('/get-aggrivations', (req, res) => {
+app.get('/get-aggrivation-and-clauses-From-crime', (req, res) => {
     var ID = req.query.ID;
-    let sql = 'SELECT * FROM crimes'; // Replace 'your_table_name' with your actual table name
+    let sql = 'SELECT * FROM aggrivations WHERE CrimeID = ID'; // Replace 'your_table_name' with your actual table name
     db.query(sql, (err, results) => {
         if (err) {
             return res.status(500).send(err);
@@ -52,10 +62,13 @@ app.get('/get-aggrivations', (req, res) => {
     });
 });
 
-
-app.post();
-
-// Start the server
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+app.get('/get-article-and-clauses', (req, res) => {
+    var ID = req.query.ID;
+    let sql = `SELECT * FROM articles WHERE ID = ${ID}`; // Replace 'your_table_name' with your actual table name
+    db.query(sql, (err, results) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        res.json(results);
+    });
 });
