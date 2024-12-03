@@ -45,6 +45,7 @@ app.get('/GetCrimes', (req, res) => {
                 return res.status(500).send(err);
             }
             if (results.length == 0) {
+                connection.release();
                 return res.status(404).send("Crimes not found");
             }
             res.status(200).json(results);
@@ -73,6 +74,7 @@ app.get('/GetCrime', (req, res) => {
                 return res.status(500).send(err);
             }
             if (results.length == 0) {
+                connection.release();
                 return res.status(404).send("Crimes not found");
             }
             res.status(200).json(results[0]);
@@ -102,6 +104,7 @@ app.get('/GetAggrivationAndClausesFromCrime', (req, res) => {
                 return res.status(500).send(err);
             }
             if (results.length == 0) {
+                connection.release();
                 return res.status(404).send("Aggrivations not found");
             }
             res.status(200).json(results);
@@ -132,6 +135,7 @@ app.get('/GetArticleAndClauses', (req, res) => {
                 return res.status(500).send(err);
             }
             if (results.length == 0) {
+                connection.release();
                 return res.status(404).send("Article not found");
             }
             results[0].Clauses = JSON.parse(results[0].Clauses);
@@ -158,6 +162,7 @@ app.get('/GetAllArticlesAndClauses', (req, res) => {
                 return res.status(500).send(err);
             }
             if (results.length == 0) {
+                connection.release();
                 return res.status(404).send("Articles not found");
             }
 
