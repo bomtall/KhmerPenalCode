@@ -4,7 +4,7 @@ from src import utils
 # command to run: streamlit run Welcome.py
 
 st.set_page_config(
-    page_title="Khmer Sentencing Guide",
+    page_title="Khmer Penal Code Sentencing Application",
     page_icon="📚",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -14,7 +14,7 @@ st.set_page_config(
 
 utils.add_sidebar_elements()
     
-st.markdown("## Khmer Penal Code Sentencing Application for Judges")
+st.markdown("Khmer Penal Code Sentencing Application Demo គំរូពាក្យសុំផ្តន្ទាទោសតាមក្រមព្រហ្មទណ្ឌខ្មែរ")
 st.markdown("""
 ---
             
