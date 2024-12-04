@@ -180,7 +180,7 @@ app.get('/GetArticleAndClauses', (req, res) => {
                 return res.status(404).send("Article not found");
             }
             // Parse the Clauses JSON string into an object
-            results[0].Clauses = JSON.parse(results[0].clauses);
+            results[0].clauses = JSON.parse(results[0].clauses);
             // Send the result as a JSON response with a 200 OK status
             res.status(200).json(results[0]);
             connection.release(); // Release the connection back to the pool
@@ -218,7 +218,7 @@ app.get('/GetAllArticlesAndClauses', (req, res) => {
 
             // Parse the Clauses JSON string into an object for each result
             for (let i = 0; i < results.length; i++) {
-                results[i].Clauses = JSON.parse(results[i].clauses);
+                results[i].clauses = JSON.parse(results[i].clauses);
             }
             // Send the results as a JSON response with a 200 OK status
             res.status(200).json(results);
