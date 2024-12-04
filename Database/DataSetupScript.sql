@@ -1,6 +1,8 @@
 USE khmerpenalcode;
 
-INSERT INTO `khmerpenalcode`.`crime`
+INSERT INTO `
+khmerpenalcode`.`crime
+`
 (`CrimeNameEnglish`,
 `CrimeNameKhmer`,
 `FineMaximum`,
@@ -11,16 +13,30 @@ INSERT INTO `khmerpenalcode`.`crime`
 `SentenceMinimumUnit`)
 VALUES
 ("Theft", "ចោរកម្ម",6000000, 1000000, 6, 3,"Y", "M"),
- ("Murder", "ឃាតកម្ម",NULL, NULL, 10, 15,"Y", "Y");
- 
- INSERT INTO `khmerpenalcode`.`articles`
+("Murder", "ឃាតកម្ម",NULL, NULL, 10, 15,"Y", "Y");
+
+INSERT INTO `
+khmerpenalcode`.`articles
+`
 (`ArticleNumber`,
 `DescriptionEnglish`,
 `DescriptionKhmer`)
 VALUES
-(357 ,"",""),( 358,"",""),( 359,"",""),(360 ,"",""),( 199,"",""),( 200,"",""),(201 ,"",""),( 202,"",""),( 203,"",""),(204 ,"",""),(205 ,"","");
+(357 ,"",""),
+( 358,"",""),
+( 359,"",""),
+(360 ,"",""),
+( 199,"",""),
+( 200,"",""),
+(201 ,"",""),
+( 202,"",""),
+( 203,"",""),
+(204 ,"",""),
+(205 ,"","");
 
-INSERT INTO `khmerpenalcode`.`clauses`
+INSERT INTO `
+khmerpenalcode`.`clauses
+`
 (`ArticleNumber`,
 `ClauseEnglish`,
 `ClauseKhmer`)
@@ -45,7 +61,9 @@ VALUES
 (204,"committed by a public official in the performance of his or her duties or in connection therewith",""),
 (205,"Murder preceded or followed by torture, cruelty or rape","");
 
-INSERT INTO `khmerpenalcode`.`aggrivations`
+INSERT INTO `
+khmerpenalcode`.`aggrivations
+`
 (`CrimeID`,
 `ClauseID`,
 `SentenceMaximum`,
