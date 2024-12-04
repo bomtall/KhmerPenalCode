@@ -159,7 +159,7 @@ with row5[1]:
             index=None
         )
         if felony_misd_pronounced_5y:
-            sentence_guide.felony_misd_pronounced_5y = bool(felony_misd_pronounced_5y)
+            sentence_guide.felony_misd_pronounced_5y = bool_dict[felony_misd_pronounced_5y]
             
     if sentence_guide.felony_misd_pronounced_5y:
         st.markdown(
@@ -175,7 +175,7 @@ with row5[1]:
                 
 with row5[2]:                   
                    
-    if sentence_guide.prev_conviction_pardon == False and sentence_guide.prev_conviction_type in ["Felony", "Misdemeanour"]:
+    if sentence_guide.prev_conviction_pardon == False and sentence_guide.prev_conviction_type in ["Felony", "Misdemeanour"] and felony_misd_pronounced_5y == "No":
         final_judgement_in_5y = st.selectbox(
                 label="Was the previous felony or misdemeanour final judgement within 5 years of the date of the offence?",
                 options=["Yes", "No"],
@@ -185,13 +185,13 @@ with row5[2]:
             sentence_guide.final_judgement_in_5y = True
 
     if sentence_guide.final_judgement_in_5y and sentence_guide.prev_conviction_type == "Felony":
-        if sentence_guide.current_max_sentence < 6:
-            sentence_guide.set_current_max_sentence(6)
+        if sentence_guide.current_max_sentence.value < 6:
+            sentence_guide.set_current_max_sentence(Sentence(6, "years"))
 
             st.metric(
                 label="New maximum sentence",
-                value=sentence_guide.current_max_sentence,
-                delta=sentence_guide.current_max_sentence - crime.standard_max_sentence,
+                value=sentence_guide.current_max_sentence.get_sentence_str(),
+                delta=sentence_guide.current_max_sentence.value - crime.standard_max_sentence.value,
                 delta_color="inverse"
             )
         
