@@ -164,7 +164,7 @@ app.get('/GetArticleAndClauses', (req, res) => {
         }
 
         // Define the SQL query to select an article and its clauses
-        let sql = `SELECT *, (SELECT JSON_ARRAYAGG(JSON_OBJECT('English',clauses.ClauseEnglish,'Khmer',clauses.ClauseKhmer,'ID',clauses.ClauseId)) FROM Clauses WHERE clauses.ArticleNumber = articles.ArticleNumber) AS Clauses FROM articles WHERE articles.ArticleNumber = ${ID}`;
+        let sql = `SELECT *, (SELECT JSON_ARRAYAGG(JSON_OBJECT('English',clauses.ClauseEnglish,'Khmer',clauses.ClauseKhmer,'ID',clauses.ClauseId)) FROM clauses WHERE clauses.ArticleNumber = articles.ArticleNumber) AS clauses FROM articles WHERE articles.ArticleNumber = ${ID}`;
 
         // Execute the SQL query
         connection.query(sql, (err, results) => {
@@ -200,7 +200,7 @@ app.get('/GetAllArticlesAndClauses', (req, res) => {
         }
 
         // Define the SQL query to select all articles and their clauses
-        let sql = `SELECT *, (SELECT JSON_ARRAYAGG(JSON_OBJECT('English',clauses.ClauseEnglish,'Khmer',clauses.ClauseKhmer,'ID',clauses.ClauseId)) FROM Clauses WHERE clauses.ArticleNumber = articles.ArticleNumber) AS Clauses FROM articles`;
+        let sql = `SELECT *, (SELECT JSON_ARRAYAGG(JSON_OBJECT('English',clauses.ClauseEnglish,'Khmer',clauses.ClauseKhmer,'ID',clauses.ClauseId)) FROM clauses WHERE clauses.ArticleNumber = articles.ArticleNumber) AS clauses FROM articles`;
 
         // Execute the SQL query
         connection.query(sql, (err, results) => {
