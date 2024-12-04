@@ -1,0 +1,169 @@
+[
+    {
+        "ArticleNumber": 199,
+        "DescriptionEnglish": "",
+        "DescriptionKhmer": "",
+        "Clauses": [
+            {
+                "ID": 6,
+                "Khmer": "",
+                "English": "Wilful killing of another person with or without a weapon with no aggravating circumstances"
+            }
+        ]
+    },
+    {
+        "ArticleNumber": 200,
+        "DescriptionEnglish": "",
+        "DescriptionKhmer": "",
+        "Clauses": [
+            {
+                "ID": 7,
+                "Khmer": "",
+                "English": "Murder committed with premeditation or by ambush"
+            }
+        ]
+    },
+    {
+        "ArticleNumber": 201,
+        "DescriptionEnglish": "",
+        "DescriptionKhmer": "",
+        "Clauses": [
+            {
+                "ID": 8,
+                "Khmer": "",
+                "English": "Murder by poisoning"
+            }
+        ]
+    },
+    {
+        "ArticleNumber": 202,
+        "DescriptionEnglish": "",
+        "DescriptionKhmer": "",
+        "Clauses": [
+            {
+                "ID": 9,
+                "Khmer": "",
+                "English": "against a person who is particularly vulnerable by reason of his or her age"
+            },
+            {
+                "ID": 10,
+                "Khmer": "",
+                "English": "against a pregnant woman whose pregnancy is obvious or known to the perpetrator"
+            },
+            {
+                "ID": 11,
+                "Khmer": "",
+                "English": "against a person who is particularly vulnerable by reason of his or her illness or disability which is obvious or known to the perpetrator"
+            },
+            {
+                "ID": 12,
+                "Khmer": "",
+                "English": "against a public official in the performance of his or her duties or in connection therewith"
+            }
+        ]
+    },
+    {
+        "ArticleNumber": 203,
+        "DescriptionEnglish": "",
+        "DescriptionKhmer": "",
+        "Clauses": [
+            {
+                "ID": 13,
+                "Khmer": "",
+                "English": "against a victim or a civil party, either to prevent him or her from reporting an offence or seeking reparation for harm"
+            },
+            {
+                "ID": 14,
+                "Khmer": "",
+                "English": "against a witness to prevent him or her from testifying at an investigation, a judicial investigation, a trial or in the proceedings of other complaints"
+            },
+            {
+                "ID": 15,
+                "Khmer": "",
+                "English": "against a victim or a civil party for reporting an offence or seeking reparation for harm suffered"
+            },
+            {
+                "ID": 16,
+                "Khmer": "",
+                "English": "against a witness for testifying at an investigation, a judicial investigation, a trial or in the proceedings of other complaints"
+            }
+        ]
+    },
+    {
+        "ArticleNumber": 204,
+        "DescriptionEnglish": "",
+        "DescriptionKhmer": "",
+        "Clauses": [
+            {
+                "ID": 17,
+                "Khmer": "",
+                "English": "committed by a public official in the performance of his or her duties or in connection therewith"
+            }
+        ]
+    },
+    {
+        "ArticleNumber": 205,
+        "DescriptionEnglish": "",
+        "DescriptionKhmer": "",
+        "Clauses": [
+            {
+                "ID": 18,
+                "Khmer": "",
+                "English": "Murder preceded or followed by torture, cruelty or rape"
+            }
+        ]
+    },
+    {
+        "ArticleNumber": 357,
+        "DescriptionEnglish": "",
+        "DescriptionKhmer": "",
+        "Clauses": [
+            {
+                "ID": 1,
+                "Khmer": "",
+                "English": "if it is commited by breaking or entering"
+            },
+            {
+                "ID": 2,
+                "Khmer": "",
+                "English": "Preceded, accompanied or followed by acts of violence"
+            }
+        ]
+    },
+    {
+        "ArticleNumber": 358,
+        "DescriptionEnglish": "",
+        "DescriptionKhmer": "",
+        "Clauses": [
+            {
+                "ID": 3,
+                "Khmer": "",
+                "English": "Preceded, accompanied or followed by acts of violence causing mutilation or permanent disability"
+            }
+        ]
+    },
+    {
+        "ArticleNumber": 359,
+        "DescriptionEnglish": "",
+        "DescriptionKhmer": "",
+        "Clauses": [
+            {
+                "ID": 4,
+                "Khmer": "",
+                "English": "Preceded, accompanied or followed by torture or acts of cruelty"
+            }
+        ]
+    },
+    {
+        "ArticleNumber": 360,
+        "DescriptionEnglish": "",
+        "DescriptionKhmer": "",
+        "Clauses": [
+            {
+                "ID": 5,
+                "Khmer": "",
+                "English": "Preceded, accompanied or followed by violence unintentionally causing the death of the victim."
+            }
+        ]
+    }
+]
