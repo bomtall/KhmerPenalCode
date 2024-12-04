@@ -88,6 +88,9 @@ class SentenceGuide:
         self.sentence_amount_to_suspend = None
         self.fine_amount_to_suspend = None
         self.intended_sentence_str=None
+        self.additonal_penalties = None
+        self.probation_length_months = None
+        self.probation_measures = None
         
 
     def initialise_with_crime(self, crime_obj: Crime) -> None:
@@ -196,7 +199,7 @@ Community service months to complete: {self.community_service_timeframe}
         
         if self.aggrevation:
             report += f"""
-Aggrevation: \n {self.aggrevation + "\n " + "\n ".join(self.crime.aggrevations[self.aggrevation]["clauses"])}
+Aggravation: \n {self.aggrevation + "\n " + "\n ".join(self.crime.aggrevations[self.aggrevation]["clauses"])}
             """
         
         if self.prev_conviction:
@@ -206,6 +209,18 @@ Type: {self.prev_conviction_type}
 Pardoned: {str(self.prev_conviction_pardon)}
 Special reasons not to revoke a prior suspended sentence: {self.special_revoke_reasons}
         """
+        
+        for i in self.additional_penalties:
+            report += f"""\n
+Additional penalty: {i[0]}
+Term: {i[1]} {i[2]}  \n\n
+        """
+        
+        if self.probation_length_months:
+            report += f"  \nProbation: {self.probation_length_months} months  \n"
+            if self.probation_measures:
+                for i in self.probation_measures:
+                    report += f"{i}  \n"
         
         return report
     

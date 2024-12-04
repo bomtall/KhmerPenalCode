@@ -45,6 +45,7 @@ row8 = st.columns(1)
 row9 = st.columns((1,1,1), gap="medium")
 row10 = st.columns(1)
 row11 = st.columns((1,1,1), gap="medium")
+row11point5 = st.columns((2,1))
 row12 = st.columns(1)
 row13 = st.columns((1), gap="medium")
 row14 = st.columns(1)
@@ -270,8 +271,6 @@ with row9[0]:
                 sentence_guide.community_service = False
             
 
-
-
 with row9[1]:
     if crime:
         if sentence_guide.community_service != True and sentence_guide.current_min_sentence:
@@ -299,7 +298,7 @@ with row9[2]:
     
     fine_bool = st.checkbox(label="Intend to fine?")
     if fine_bool:
-        fine_input = st.number_input(label="Enter the intended fine amount", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine))
+        fine_input = st.number_input(label="Enter the intended fine amount", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine), step=10000.00)
         fine_slider = st.slider(label="Enter the intended fine amount", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine), format='៛%d', value=fine_input, disabled=True)
         st.markdown(f"Fine: ៛{millify.millify(fine_input)}")
         sentence_guide.intended_fine = fine_input
@@ -313,7 +312,6 @@ with row10[0]:
     st.markdown("## 6. Suspended sentences / ប្រយោគដែលផ្អាក")
 
 with row11[0]:
-    
     st.markdown("Is the sentence to be passed at section 5 for the current offence less than 5 years (and a fine)?")
     if sentence_guide.intended_sentence:
         if sentence_guide.possible_to_reprimand() and sentence_guide.intended_sentence:
@@ -343,6 +341,35 @@ with row11[2]:
             elif suspend_whole_fine == "No":
                 fine_amount_to_suspend = st.slider(label="Amount to suspend", min_value=0.0, max_value=float(sentence_guide.intended_fine), format='៛%d')
                 sentence_guide.fine_amount_to_suspend = fine_amount_to_suspend
+                
+with row11point5[0]:
+    if sentence_guide.sentence_amount_to_suspend:
+        if ((sentence_guide.sentence_suspended or sentence_guide.sentence_amount_to_suspend) and 
+        (sentence_guide.intended_sentence.convert_to_years() < 5 and sentence_guide.intended_sentence.convert_to_years() > 0.5)
+        ):
+            probation_length = st.slider(label="If probation is to be ordered state length of probation between one and three years (in months)", min_value=0, max_value=36)
+            probation_measures = st.multiselect(
+                label="Select Probation Measures",
+                options=[
+                    "(1) to remain in employment",
+                    "(2) to follow a course of instruction or vocational training",
+                    "(3) to take up residence in a specified place",
+                    "(4) to undergo medical examination or treatment",  
+                    "(5) to demonstrate that he or she is contributing to his or her family's expenses",
+                    "(6) to repair, pursuant to his or her means, the harm caused by the offence",
+                    "(7) to demonstrate that he or she is paying, pursuant to his or her means, the amounts  owing to the State as a result of his or her conviction",
+                    "(8) not to engage in the professional or social activity as specified by the court which  enabled or facilitated the commission of the offence",
+                    "(9) not to be present in such places as specified by the court",
+                    "(10) not to frequent gambling places",
+                    "(11) not to frequent drinking establishments",
+                    "(12) not to associate with certain persons as specified by the court, especially the  perpetrator, co-perpetrators, instigators, accomplices or victims of the offence",
+                    "(13) not to have or carry any weapon, explosive or ammunition of any kind"
+                ]
+            )
+            if probation_length > 0:
+                sentence_guide.probation_length_months = probation_length
+                if probation_measures:
+                    sentence_guide.probation_measures = probation_measures
             
 
 with row12[0]:
@@ -376,8 +403,10 @@ with row16[0]:
     st.markdown('---')
     
 with st.sidebar:
-    st.markdown("### Guidelines")
-    if crime:
+    st.markdown("## Khmer Penal Code Sentencing Application")
+    
+    if crime and sentence_guide.current_max_sentence:
+        st.markdown("### Sentencing range")
         st.markdown(f"Current max sentence: **{sentence_guide.current_max_sentence.get_sentence_str()}**")
         st.markdown(f"Current min sentence: **{sentence_guide.current_min_sentence.get_sentence_str()}**")
         st.markdown(f"Current max fine: **៛{millify.millify(sentence_guide.current_max_fine)}**")
