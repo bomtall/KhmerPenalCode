@@ -1,8 +1,7 @@
 USE khmerpenalcode;
 
-INSERT INTO `
-khmerpenalcode`.`crime
-`
+INSERT INTO crime
+
 (`CrimeNameEnglish`,
 `CrimeNameKhmer`,
 `FineMaximum`,
@@ -15,9 +14,7 @@ VALUES
 ("Theft", "ចោរកម្ម",6000000, 1000000, 6, 3,"Y", "M"),
 ("Murder", "ឃាតកម្ម",NULL, NULL, 10, 15,"Y", "Y");
 
-INSERT INTO `
-khmerpenalcode`.`articles
-`
+INSERT INTO articles
 (`ArticleNumber`,
 `DescriptionEnglish`,
 `DescriptionKhmer`)
@@ -34,9 +31,7 @@ VALUES
 (204 ,"",""),
 (205 ,"","");
 
-INSERT INTO `
-khmerpenalcode`.`clauses
-`
+INSERT INTO clauses
 (`ArticleNumber`,
 `ClauseEnglish`,
 `ClauseKhmer`)
@@ -61,9 +56,7 @@ VALUES
 (204,"committed by a public official in the performance of his or her duties or in connection therewith",""),
 (205,"Murder preceded or followed by torture, cruelty or rape","");
 
-INSERT INTO `
-khmerpenalcode`.`aggrivations
-`
+INSERT INTO aggrivations
 (`CrimeID`,
 `ClauseID`,
 `SentenceMaximum`,
