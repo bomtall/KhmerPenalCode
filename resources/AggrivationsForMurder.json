@@ -1,0 +1,145 @@
+[
+    {
+        "CrimeID": 2,
+        "ClauseID": 6,
+        "SentenceMaximum": 15,
+        "SentenceMinimum": 30,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y",
+        "ArticleNumber": 199,
+        "ClauseEnglish": "Wilful killing of another person with or without a weapon with no aggravating circumstances",
+        "ClauseKhmer": ""
+    },
+    {
+        "CrimeID": 2,
+        "ClauseID": 7,
+        "SentenceMaximum": 15,
+        "SentenceMinimum": 30,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y",
+        "ArticleNumber": 200,
+        "ClauseEnglish": "Murder committed with premeditation or by ambush",
+        "ClauseKhmer": ""
+    },
+    {
+        "CrimeID": 2,
+        "ClauseID": 8,
+        "SentenceMaximum": 15,
+        "SentenceMinimum": 30,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y",
+        "ArticleNumber": 201,
+        "ClauseEnglish": "Murder by poisoning",
+        "ClauseKhmer": ""
+    },
+    {
+        "CrimeID": 2,
+        "ClauseID": 9,
+        "SentenceMaximum": 15,
+        "SentenceMinimum": 30,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y",
+        "ArticleNumber": 202,
+        "ClauseEnglish": "against a person who is particularly vulnerable by reason of his or her age",
+        "ClauseKhmer": ""
+    },
+    {
+        "CrimeID": 2,
+        "ClauseID": 10,
+        "SentenceMaximum": 15,
+        "SentenceMinimum": 30,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y",
+        "ArticleNumber": 202,
+        "ClauseEnglish": "against a pregnant woman whose pregnancy is obvious or known to the perpetrator",
+        "ClauseKhmer": ""
+    },
+    {
+        "CrimeID": 2,
+        "ClauseID": 11,
+        "SentenceMaximum": 15,
+        "SentenceMinimum": 30,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y",
+        "ArticleNumber": 202,
+        "ClauseEnglish": "against a person who is particularly vulnerable by reason of his or her illness or disability which is obvious or known to the perpetrator",
+        "ClauseKhmer": ""
+    },
+    {
+        "CrimeID": 2,
+        "ClauseID": 12,
+        "SentenceMaximum": 15,
+        "SentenceMinimum": 30,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y",
+        "ArticleNumber": 202,
+        "ClauseEnglish": "against a public official in the performance of his or her duties or in connection therewith",
+        "ClauseKhmer": ""
+    },
+    {
+        "CrimeID": 2,
+        "ClauseID": 13,
+        "SentenceMaximum": 15,
+        "SentenceMinimum": 30,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y",
+        "ArticleNumber": 203,
+        "ClauseEnglish": "against a victim or a civil party, either to prevent him or her from reporting an offence or seeking reparation for harm",
+        "ClauseKhmer": ""
+    },
+    {
+        "CrimeID": 2,
+        "ClauseID": 14,
+        "SentenceMaximum": 15,
+        "SentenceMinimum": 30,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y",
+        "ArticleNumber": 203,
+        "ClauseEnglish": "against a witness to prevent him or her from testifying at an investigation, a judicial investigation, a trial or in the proceedings of other complaints",
+        "ClauseKhmer": ""
+    },
+    {
+        "CrimeID": 2,
+        "ClauseID": 15,
+        "SentenceMaximum": 15,
+        "SentenceMinimum": 30,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y",
+        "ArticleNumber": 203,
+        "ClauseEnglish": "against a victim or a civil party for reporting an offence or seeking reparation for harm suffered",
+        "ClauseKhmer": ""
+    },
+    {
+        "CrimeID": 2,
+        "ClauseID": 16,
+        "SentenceMaximum": 15,
+        "SentenceMinimum": 30,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y",
+        "ArticleNumber": 203,
+        "ClauseEnglish": "against a witness for testifying at an investigation, a judicial investigation, a trial or in the proceedings of other complaints",
+        "ClauseKhmer": ""
+    },
+    {
+        "CrimeID": 2,
+        "ClauseID": 17,
+        "SentenceMaximum": 15,
+        "SentenceMinimum": 30,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y",
+        "ArticleNumber": 204,
+        "ClauseEnglish": "committed by a public official in the performance of his or her duties or in connection therewith",
+        "ClauseKhmer": ""
+    },
+    {
+        "CrimeID": 2,
+        "ClauseID": 18,
+        "SentenceMaximum": 15,
+        "SentenceMinimum": 30,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y",
+        "ArticleNumber": 205,
+        "ClauseEnglish": "Murder preceded or followed by torture, cruelty or rape",
+        "ClauseKhmer": ""
+    }
+]

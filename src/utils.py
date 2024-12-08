@@ -23,9 +23,8 @@ def create_sentence_period(years) -> str:
     
 
 def add_sidebar_elements() -> None:
-    st.sidebar.title("Khmer Penal Code Navigator")
+    st.sidebar.title("Khmer Penal Code Sentencing Application")
     st.sidebar.markdown("Contact: lblackman@cltc.law")
-    st.sidebar.markdown("[Ministry of Justice ក្រសួងយុត្តិធម៌](https://www.moj.gov.kh/)")
     st.sidebar.markdown("[ក្រមព្រហ្មទណ្ឌនៃប្រទេសកម្ពុជា](https://www.ajne.org/sites/default/files/resource/laws/7195/criminal-code-cambodia-en-kh.pdf)")
     st.sidebar.image("./resources/penal_code.png", width=150)
     st.sidebar.markdown("[English Translation](https://www.ajne.org/sites/default/files/resource/laws/7195/criminal-code-cambodia-en-kh.pdf)")

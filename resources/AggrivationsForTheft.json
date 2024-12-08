@@ -1,0 +1,46 @@
+[
+    {
+        "CrimeID": 1,
+        "ClauseID": 1,
+        "SentenceMaximum": 3,
+        "SentenceMinimum": 10,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y",
+        "ArticleNumber": 357,
+        "ClauseEnglish": "if it is commited by breaking or entering",
+        "ClauseKhmer": ""
+    },
+    {
+        "CrimeID": 1,
+        "ClauseID": 2,
+        "SentenceMaximum": 10,
+        "SentenceMinimum": 20,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y",
+        "ArticleNumber": 357,
+        "ClauseEnglish": "Preceded, accompanied or followed by acts of violence",
+        "ClauseKhmer": ""
+    },
+    {
+        "CrimeID": 1,
+        "ClauseID": 3,
+        "SentenceMaximum": 15,
+        "SentenceMinimum": 30,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y",
+        "ArticleNumber": 358,
+        "ClauseEnglish": "Preceded, accompanied or followed by acts of violence causing mutilation or permanent disability",
+        "ClauseKhmer": ""
+    },
+    {
+        "CrimeID": 1,
+        "ClauseID": 4,
+        "SentenceMaximum": 15,
+        "SentenceMinimum": 30,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y",
+        "ArticleNumber": 359,
+        "ClauseEnglish": "Preceded, accompanied or followed by torture or acts of cruelty",
+        "ClauseKhmer": ""
+    }
+]
