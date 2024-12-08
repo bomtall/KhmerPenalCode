@@ -14,6 +14,18 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+def initialize_session_state(keys, default_value=0):
+    for key in keys:
+        if key not in st.session_state:
+            st.session_state[key] = default_value
+
+initialize_session_state(["current_max_s", "current_min_s"])
+
+def add_title(row, title):
+    with rows[row][0]:
+        st.markdown("---")
+        st.markdown("## " + title)
+
 bool_dict = {
     "Yes": True,
     "No": False,
@@ -60,26 +72,29 @@ TITLES = {
     "row16": "",
 }
 
+PROBATIONS = [
+    "(1) to remain in employment",
+    "(2) to follow a course of instruction or vocational training",
+    "(3) to take up residence in a specified place",
+    "(4) to undergo medical examination or treatment",  
+    "(5) to demonstrate that he or she is contributing to his or her family's expenses",
+    "(6) to repair, pursuant to his or her means, the harm caused by the offence",
+    "(7) to demonstrate that he or she is paying, pursuant to his or her means, the amounts  owing to the State as a result of his or her conviction",
+    "(8) not to engage in the professional or social activity as specified by the court which  enabled or facilitated the commission of the offence",
+    "(9) not to be present in such places as specified by the court",
+    "(10) not to frequent gambling places",
+    "(11) not to frequent drinking establishments",
+    "(12) not to associate with certain persons as specified by the court, especially the  perpetrator, co-perpetrators, instigators, accomplices or victims of the offence",
+    "(13) not to have or carry any weapon, explosive or ammunition of any kind"
+]
+
 rows = {key: st.columns(layout, gap="medium") for key, layout in COLUMN_LAYOUTS.items()}
-
-crime=None
-sentence_guide = SentenceGuide()
-
-def initialize_session_state(keys, default_value=0):
-    for key in keys:
-        if key not in st.session_state:
-            st.session_state[key] = default_value
-
-initialize_session_state(["current_max_s", "current_min_s"])
-
-def add_title(row, title):
-    with rows[row][0]:
-        st.markdown("---")
-        st.markdown("## " + title)
 
 for row, title in TITLES.items():
     add_title(row, title)
 
+crime=None
+sentence_guide = SentenceGuide()
 
 with rows["row1"][0]:
     crime_dropdown = st.selectbox("Select crime / ជ្រើសរើសបទឧក្រិដ្ឋ",  list(penal_dict.keys()), index=None)
@@ -125,7 +140,6 @@ if crime and aggrevations_radio:
         sentence_guide.aggrevation = aggrevations_radio
 
        
-
 with rows["row5"][0]:
     
     if crime and aggrevations_radio:
@@ -230,7 +244,6 @@ with rows["row5"][2]:
                 )
 
 
-    
 with rows["row7"][0]:
     mitigations = st.selectbox(
         label="Are there mitigating circumstances warranted by the nature of the offence or the character of the accused? / តើមានកាលៈទេសៈបន្ធូរបន្ថយដែលធានាដោយលក្ខណៈនៃបទល្មើស ឬចរិតលក្ខណៈរបស់ជនជាប់ចោទ?",
@@ -311,8 +324,6 @@ with rows["row9"][2]:
         sentence_guide.intended_fine = 0
                 
              
-  
-
 with rows["row11"][0]:
     st.markdown("Is the sentence to be passed at section 5 for the current offence less than 5 years (and a fine)?")
     if sentence_guide.intended_sentence:
@@ -350,29 +361,13 @@ with rows["row11point5"][0]:
             probation_length = st.slider(label="If probation is to be ordered state length of probation between one and three years (in months)", min_value=0, max_value=36)
             probation_measures = st.multiselect(
                 label="Select Probation Measures",
-                options=[
-                    "(1) to remain in employment",
-                    "(2) to follow a course of instruction or vocational training",
-                    "(3) to take up residence in a specified place",
-                    "(4) to undergo medical examination or treatment",  
-                    "(5) to demonstrate that he or she is contributing to his or her family's expenses",
-                    "(6) to repair, pursuant to his or her means, the harm caused by the offence",
-                    "(7) to demonstrate that he or she is paying, pursuant to his or her means, the amounts  owing to the State as a result of his or her conviction",
-                    "(8) not to engage in the professional or social activity as specified by the court which  enabled or facilitated the commission of the offence",
-                    "(9) not to be present in such places as specified by the court",
-                    "(10) not to frequent gambling places",
-                    "(11) not to frequent drinking establishments",
-                    "(12) not to associate with certain persons as specified by the court, especially the  perpetrator, co-perpetrators, instigators, accomplices or victims of the offence",
-                    "(13) not to have or carry any weapon, explosive or ammunition of any kind"
-                ]
+                options=PROBATIONS
             )
             if probation_length > 0:
                 sentence_guide.probation_length_months = probation_length
                 if probation_measures:
                     sentence_guide.probation_measures = probation_measures
  
-     
-
 
 with rows["row13"][0]:
     
