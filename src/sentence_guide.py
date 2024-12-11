@@ -3,7 +3,6 @@ import src.utils as utils
 import math
 import datetime as dt
 
-
 class Sentence:
     def __init__(self, value: float, unit: str):        
         self.unit = unit
@@ -37,7 +36,6 @@ class Sentence:
         elif self.unit =="days":
             return self.value/365
             
-
 class Crime:
     def __init__(self, crime_data: dict):
         self.data = crime_data
@@ -204,16 +202,16 @@ Aggravation: \n {self.aggrevation + "\n " + "\n ".join(self.crime.aggrevations[s
         
         if self.prev_conviction:
             report += f"""
-Previous convictions: {str(self.prev_conviction)}
-Type: {self.prev_conviction_type}
-Pardoned: {str(self.prev_conviction_pardon)}
-Special reasons not to revoke a prior suspended sentence: {self.special_revoke_reasons}
+Previous convictions: {str(self.prev_conviction)}  
+Type: {self.prev_conviction_type}  
+Pardoned: {str(self.prev_conviction_pardon)}  
+Special reasons not to revoke a prior suspended sentence: {self.special_revoke_reasons}  
         """
         
         for i in self.additional_penalties:
             report += f"""\n
-Additional penalty: {i[0]}
-Term: {i[1]} {i[2]}  \n\n
+Additional penalty: {i[0]}  
+Term: {i[1]} {i[2]}  \n
         """
         
         if self.probation_length_months:

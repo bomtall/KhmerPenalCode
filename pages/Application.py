@@ -56,7 +56,7 @@ COLUMN_LAYOUTS = {
     "row12": (1,),
     "row13": (1,),
     "row14": (1,),
-    "row15": (1, 1, 1),
+    "row15": (2, 1),
     "row16": (1, 1)
 }
 
@@ -201,7 +201,7 @@ with rows["row5"][1]:
                 
 with rows["row5"][2]:                   
                    
-    if sentence_guide.prev_conviction_pardon == False and sentence_guide.prev_conviction_type in ["Felony", "Misdemeanour"] and felony_misd_pronounced_5y == "No":
+    if felony_misd_pronounced_5y == "No" and sentence_guide.prev_conviction_pardon == False and sentence_guide.prev_conviction_type in ["Felony", "Misdemeanour"]:
         final_judgement_in_5y = st.selectbox(
                 label="Was the previous felony or misdemeanour final judgement within 5 years of the date of the offence?",
                 options=["Yes", "No"],
