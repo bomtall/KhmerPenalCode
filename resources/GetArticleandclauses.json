@@ -1,0 +1,27 @@
+{
+    "ArticleNumber": 203,
+    "DescriptionEnglish": "",
+    "DescriptionKhmer": "",
+    "Clauses": [
+        {
+            "ID": 13,
+            "Khmer": "",
+            "English": "against a victim or a civil party, either to prevent him or her from reporting an offence or seeking reparation for harm"
+        },
+        {
+            "ID": 14,
+            "Khmer": "",
+            "English": "against a witness to prevent him or her from testifying at an investigation, a judicial investigation, a trial or in the proceedings of other complaints"
+        },
+        {
+            "ID": 15,
+            "Khmer": "",
+            "English": "against a victim or a civil party for reporting an offence or seeking reparation for harm suffered"
+        },
+        {
+            "ID": 16,
+            "Khmer": "",
+            "English": "against a witness for testifying at an investigation, a judicial investigation, a trial or in the proceedings of other complaints"
+        }
+    ]
+}

@@ -154,7 +154,7 @@ with rows["row5"][0]:
             sentence_guide.prev_conviction = False
         
         if sentence_guide.prev_conviction:
-            prev_conviction_pardon = st.selectbox(label="Has the previous conviction been pardoned?", options=["Yes", "No"], index=None)
+            prev_conviction_pardon = st.selectbox(label="Has the previous conviction been pardoned? / តើ​ការ​កាត់​ទោស​លើក​មុន​ត្រូវ​បាន​លើក​លែង​ទោស​ដែរ​ឬ​ទេ?", options=["Yes", "No"], index=None)
             if prev_conviction_pardon == "Yes":
                 sentence_guide.prev_conviction_pardon = True
             elif prev_conviction_pardon == "No":
@@ -162,18 +162,18 @@ with rows["row5"][0]:
         if sentence_guide.prev_conviction and sentence_guide.prev_conviction_pardon == False:
             st.markdown(
                 """
-                **Definitions**  \n
-                **Felony**: *From five years to life imprisonment*  \n
-                **Misdemeanour**: *from seven days up to five years imprisonment*  \n
-                **Petty Offence**: *A fine or up to 6 days in prison*
+                **Definitions** / និយមន័យ \n
+                **Felony**: *From five years to life imprisonment* / បទឧក្រិដ្ឋ៖ ចាប់​ពី​ប្រាំ​ឆ្នាំ​ទៅ​ដាក់​ពន្ធនាគារ​អស់​មួយ​ជីវិត \n
+                **Misdemeanour**: *from seven days up to five years imprisonment* / បទមជ្ឈិម៖ ជាប់ពន្ធនាគារពីប្រាំពីរថ្ងៃទៅប្រាំឆ្នាំ \n
+                **Petty Offence**: *A fine or up to 6 days in prison* / បទល្មើសតូចតាច៖ ពិន័យជាប្រាក់ ឬជាប់ពន្ធនាគាររហូតដល់ ៦ថ្ងៃ
                 """
             )
 
 with rows["row5"][1]:
     if sentence_guide.prev_conviction_pardon == False:
         prev_conviction_type = st.selectbox(
-            label="Was the previous conviction a felony, misdemeanour or petty offence?  \n If both felony & misdemeanour apply, select felony",
-            options=["Felony", "Misdemeanour", "Petty offence"],
+            label="Was the previous conviction a felony, misdemeanour or petty offence? / តើការផ្តន្ទាទោសពីមុនជាបទឧក្រិដ្ឋ បទមជ្ឈិម ឬបទល្មើសតូចតាច? \n If both felony & misdemeanour apply, select felony / ប្រសិនបើទាំងបទឧក្រិដ្ឋ និងបទមជ្ឈិមត្រូវបានអនុវត្ត សូមជ្រើសរើសបទឧក្រិដ្ឋ",
+            options=["Felony / ឧក្រិដ្ឋកម្ម", "Misdemeanour / បទមជ្ឈិម", "Petty offence / បទល្មើសតូចតាច"],
             index=None                             
         )
         sentence_guide.prev_conviction_type = prev_conviction_type
@@ -192,18 +192,18 @@ with rows["row5"][1]:
             "**Note:** the prior suspended sentence is revoked and the applicable penalty for the new offence will not run concurrently"
         )
         special_reasons = st.selectbox(
-            label="Are there any special reasons not to revoke a prior suspended sentence? (Art 110)",
+            label="Are there any special reasons not to revoke a prior suspended sentence? (Art 110) / តើ​មាន​ហេតុផល​ពិសេស​ណា​មួយ​ដែល​មិន​ត្រូវ​លុប​ចោល​ទោស​ព្យួរ​ទុក​មុន​ទេ? (សិល្បៈ ១១០)",
             options=["Yes", "No"],
             index=None
         )
         if special_reasons == "Yes":
-            sentence_guide.special_revoke_reasons = st.text_input(label="Please give reasons")
+            sentence_guide.special_revoke_reasons = st.text_input(label="Please give reasons / សូមផ្តល់ហេតុផល")
                 
 with rows["row5"][2]:                   
                    
     if felony_misd_pronounced_5y == "No" and sentence_guide.prev_conviction_pardon == False and sentence_guide.prev_conviction_type in ["Felony", "Misdemeanour"]:
         final_judgement_in_5y = st.selectbox(
-                label="Was the previous felony or misdemeanour final judgement within 5 years of the date of the offence?",
+                label="Was the previous felony or misdemeanour final judgement within 5 years of the date of the offence? / តើបទឧក្រិដ្ឋពីមុន ឬបទមជ្ឈិមត្រូវកាត់ទោសចុងក្រោយក្នុងរយៈពេល 5 ឆ្នាំគិតចាប់ពីថ្ងៃប្រព្រឹត្តិបទល្មើសដែរឬទេ?",
                 options=["Yes", "No"],
                 index=None
             )
@@ -215,9 +215,9 @@ with rows["row5"][2]:
             sentence_guide.set_current_max_sentence(Sentence(6, "years"))
 
             st.metric(
-                label="New maximum sentence",
-                value=sentence_guide.current_max_sentence.get_sentence_str(),
-                delta=sentence_guide.current_max_sentence.value - crime.standard_max_sentence.value,
+                label="New maximum sentence / ប្រយោគអតិបរមាថ្មី។",
+                value=sentence_guide.current_max_sentence,
+                delta=sentence_guide.current_max_sentence - crime.standard_max_sentence,
                 delta_color="inverse"
             )
         
@@ -237,7 +237,7 @@ with rows["row5"][2]:
                 sentence_guide.set_current_max_sentence(prev_conv_new_sentence)
 
                 st.metric(
-                    label="New maximum sentence",
+                    label="New maximum sentence / ប្រយោគអតិបរមាថ្មី។",
                     value=sentence_guide.current_max_sentence.get_sentence_str(),
                     delta=diff,
                     delta_color="inverse"
@@ -249,7 +249,7 @@ with rows["row7"][0]:
         label="Are there mitigating circumstances warranted by the nature of the offence or the character of the accused? / តើមានកាលៈទេសៈបន្ធូរបន្ថយដែលធានាដោយលក្ខណៈនៃបទល្មើស ឬចរិតលក្ខណៈរបស់ជនជាប់ចោទ?",
         options=["Yes", "No"], index=None)
     if mitigations == "Yes":
-        basis_of_mitigations = st.text_area(label="Court to enter basis of finding mitigating circumstances")
+        basis_of_mitigations = st.text_area(label="Court to enter basis of finding mitigating circumstances / តុលាការ​ដើម្បី​ចូល​រួម​ក្នុង​ការ​ស្វែង​រក​ស្ថានការណ៍​បន្ធូរបន្ថយ")
         if basis_of_mitigations:
             sentence_guide.basis_of_mitigations = basis_of_mitigations
 
@@ -259,7 +259,7 @@ if mitigations == "Yes":
         min_sentence_diff = sentence_guide.mitigtate_sentence_article_94()
         min_fine_diff = sentence_guide.mitigate_fine_article_94()
         st.metric(
-            label="New minimum sentence",
+            label="New minimum sentence / ប្រយោគអប្បបរមាថ្មី។",
             value=sentence_guide.current_min_sentence.get_sentence_str(),
             delta=min_sentence_diff,
             delta_color="inverse"
@@ -267,7 +267,7 @@ if mitigations == "Yes":
             
     with rows["row7"][2]:
         st.metric(
-            label="New minimum fine",
+            label="New minimum fine / ការផាកពិន័យអប្បបរមាថ្មី។",
             value="៛" + millify.millify(sentence_guide.current_min_fine),
             delta=millify.millify(min_fine_diff),
             delta_color="inverse"
@@ -278,11 +278,11 @@ with rows["row9"][0]:
     if sentence_guide.current_max_sentence != None:
         if sentence_guide.current_max_sentence.unit == "years" and sentence_guide.current_max_sentence.value <= 3:
             st.markdown("If the maximum at this stage is not more than 3 years imprisonment consider community service or a reprimand (Articles 72 & 76) No fine or imprisonment allowed alongside.")
-            community_service = st.selectbox(label="Community Service", options=["Yes", "No"], index=None)
+            community_service = st.selectbox(label="Community Service / សេវាសហគមន៍", options=["Yes", "No"], index=None)
             if community_service == "Yes":
                 sentence_guide.community_service = True
-                cs_hours = st.slider(label="How many hours of community service?", min_value=30, max_value=200, step=1, value=115)
-                cs_timeframe =  st.slider(label="Time for performance of community service in months", max_value=12, step=1, value=6)
+                cs_hours = st.slider(label="How many hours of community service? / តើសេវាសហគមន៍ប៉ុន្មានម៉ោង?", min_value=30, max_value=200, step=1, value=115)
+                cs_timeframe =  st.slider(label="Time for performance of community service in months / ពេលវេលាសម្រាប់ការអនុវត្តសេវាសហគមន៍គិតជាខែ", max_value=12, step=1, value=6)
                 sentence_guide.community_service_hours = cs_hours
                 sentence_guide.community_service_timeframe = cs_timeframe
             elif community_service == "No":
@@ -294,13 +294,13 @@ with rows["row9"][1]:
         if sentence_guide.community_service != True and sentence_guide.current_min_sentence:
             st.markdown("If imprisonment or fine what is the sentence the Court intends to pass before consideration of suspending the sentence in whole or part (Stage 6)?")
             if sentence_guide.current_min_sentence.value > 1 and sentence_guide.current_min_sentence.unit == "years":
-                years = st.number_input(label="Years", min_value=sentence_guide.current_min_sentence.value, max_value=sentence_guide.current_max_sentence.value)
+                years = st.number_input(label="Years / ឆ្នាំ", min_value=sentence_guide.current_min_sentence.value, max_value=sentence_guide.current_max_sentence.value)
 
             else:
-                years = st.number_input(label="Years", min_value=0.0, max_value=float(math.ceil(sentence_guide.current_max_sentence.convert_to_years())), step=1.0)
-            months = st.number_input(label="Months", min_value=0, max_value=12, step=1)
-            weeks = st.number_input(label="Weeks", min_value=0, max_value=4, step=1)
-            days = st.number_input(label="Days", min_value=0, max_value=7, step=1)
+                years = st.number_input(label="Years / ឆ្នាំ", min_value=0.0, max_value=float(math.ceil(sentence_guide.current_max_sentence.convert_to_years())), step=1.0)
+            months = st.number_input(label="Months / ខែ", min_value=0, max_value=12, step=1)
+            weeks = st.number_input(label="Weeks / សប្តាហ៍", min_value=0, max_value=4, step=1)
+            days = st.number_input(label="Days / ថ្ងៃ", min_value=0, max_value=7, step=1)
     
             sum = years+(months/12)+(weeks/52)+(days/365)
             if sum > sentence_guide.current_max_sentence.convert_to_years() or sum < sentence_guide.current_min_sentence.convert_to_years():
@@ -314,10 +314,10 @@ with rows["row9"][1]:
                 
 with rows["row9"][2]:
     
-    fine_bool = st.checkbox(label="Intend to fine?")
+    fine_bool = st.checkbox(label="Intend to fine? / មានបំណងល្អ?")
     if fine_bool:
-        fine_input = st.number_input(label="Enter the intended fine amount", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine), step=10000.00)
-        fine_slider = st.slider(label="Enter the intended fine amount", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine), format='៛%d', value=fine_input, disabled=True)
+        fine_input = st.number_input(label="Enter the intended fine amount / បញ្ចូលចំនួនទឹកប្រាក់ពិន័យដែលចង់បាន", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine))
+        fine_slider = st.slider(label="Enter the intended fine amount / បញ្ចូលចំនួនទឹកប្រាក់ពិន័យដែលចង់បាន", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine), format='៛%d', value=fine_input, disabled=True)
         st.markdown(f"Fine: ៛{millify.millify(fine_input)}")
         sentence_guide.intended_fine = fine_input
     else:
@@ -329,16 +329,16 @@ with rows["row11"][0]:
     if sentence_guide.intended_sentence:
         if sentence_guide.possible_to_reprimand() and sentence_guide.intended_sentence:
             if not sentence_guide.community_service and sentence_guide.intended_sentence.value <  5:
-                offer_to_reprimand = st.selectbox(label="Offer to suspend Sentence in full or in part (as well as fine)", options=["Yes", "No"], index=None)
+                offer_to_reprimand = st.selectbox(label="Offer to suspend Sentence in full or in part (as well as fine) / ផ្តល់ជូនការផ្អាកប្រយោគទាំងស្រុង ឬមួយផ្នែក (ក៏ដូចជាការផាកពិន័យ)", options=["Yes", "No"], index=None)
                 sentence_guide.offer_to_reprimand = bool_dict[offer_to_reprimand]
             
 with rows["row11"][1]:
     st.markdown("##")
     if sentence_guide.offer_to_reprimand:
-        suspend_whole_sentence = st.selectbox(label="Is the prison sentence to be suspended in whole?", options=["Yes", "No"], index=None)
+        suspend_whole_sentence = st.selectbox(label="Is the prison sentence to be suspended in whole? / តើ​ទោស​ជាប់​ពន្ធនាគារ​ត្រូវ​ព្យួរ​ទាំងស្រុង​ឬ?", options=["Yes", "No"], index=None)
         if suspend_whole_sentence == "No":
-            st.markdown("How much to suspend?")
-            suspend_unit = st.selectbox(label="Unit", options=["years", "months", "weeks", "days"])
+            st.markdown("How much to suspend? / តើត្រូវផ្អាកប៉ុន្មាន?")
+            suspend_unit = st.selectbox(label="Unit / ឯកតា", options=["years", "months", "weeks", "days"])
             suspend_amount = st.number_input(label="Amount", step=1)
             sentence_guide.sentence_amount_to_suspend = Sentence(suspend_amount, suspend_unit)
         if suspend_whole_sentence == "Yes":
@@ -348,11 +348,11 @@ with rows["row11"][2]:
     st.markdown("##")
     if sentence_guide.offer_to_reprimand and fine_bool:
         if sentence_guide.possible_to_reprimand():
-            suspend_whole_fine = st.selectbox(label="Is the fine to be suspended in whole?", options=["Yes", "No"], index=None)
+            suspend_whole_fine = st.selectbox(label="Is the fine to be suspended in whole? / តើការផាកពិន័យត្រូវព្យួរទាំងស្រុងទេ?", options=["Yes", "No"], index=None)
             if suspend_whole_fine == "Yes":
                 sentence_guide.fine_suspended = True
             elif suspend_whole_fine == "No":
-                fine_amount_to_suspend = st.slider(label="Amount to suspend", min_value=0.0, max_value=float(sentence_guide.intended_fine), format='៛%d')
+                fine_amount_to_suspend = st.slider(label="Amount to suspend / ចំនួនទឹកប្រាក់ដែលត្រូវផ្អាក", min_value=0.0, max_value=float(sentence_guide.intended_fine), format='៛%d')
                 sentence_guide.fine_amount_to_suspend = fine_amount_to_suspend
                 
 with rows["row11point5"][0]:
@@ -372,12 +372,12 @@ with rows["row11point5"][0]:
 with rows["row13"][0]:
     
     if crime:
-        add_penalties = st.multiselect(label="Select any number of additional penalties", options=crime.additional_penalties)
+        add_penalties = st.multiselect(label="Select any number of additional penalties / ជ្រើសរើសចំនួនពិន័យបន្ថែមណាមួយ។", options=crime.additional_penalties)
         additional_penalties_list = []
         for penalty in add_penalties:
             st.markdown(f"**{penalty}**")
-            u = st.selectbox(label="Unit", options=["years", "months", "weeks", "days"], key="unit"+penalty)
-            t = st.number_input(label="Enter given term", step=1, key="amount-" + penalty)
+            u = st.selectbox(label="Unit / ឯកតា", options=["years", "months", "weeks", "days"], key="unit"+penalty)
+            t = st.number_input(label="Enter given term / បញ្ចូលពាក្យដែលបានផ្តល់ឱ្យ", step=1, key="amount-" + penalty)
             additional_penalties_list.append([penalty, t, u])
         sentence_guide.additional_penalties = additional_penalties_list    
 
@@ -386,7 +386,7 @@ with rows["row15"][0]:
     if sentence_guide.intended_sentence or sentence_guide.community_service:
         data = sentence_guide.generate_report()
         st.markdown(data)
-        st.download_button(label="Download Report", data=data, file_name="Sentence Guidelines Report.txt")
+        st.download_button(label="Download Report / ទាញយករបាយការណ៍", data=data, file_name="Sentence Guidelines Report.txt")
 
     
 with st.sidebar:

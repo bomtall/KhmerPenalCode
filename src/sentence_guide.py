@@ -210,9 +210,9 @@ Special reasons not to revoke a prior suspended sentence: {self.special_revoke_r
         
         for i in self.additional_penalties:
             report += f"""\n
+
 Additional penalty: {i[0]}  
-Term: {i[1]} {i[2]}  \n
-        """
+Term: {i[1]} {i[2]}  \n       """
         
         if self.probation_length_months:
             report += f"  \nProbation: {self.probation_length_months} months  \n"

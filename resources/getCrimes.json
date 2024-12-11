@@ -1,0 +1,24 @@
+[
+    {
+        "ID": 1,
+        "CrimeNameEnglish": "Theft",
+        "CrimeNameKhmer": "ចោរកម្ម",
+        "FineMaximum": 6000000,
+        "FineMinimum": 1000000,
+        "SentenceMaximum": 6,
+        "SentenceMinimum": 3,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "M"
+    },
+    {
+        "ID": 2,
+        "CrimeNameEnglish": "Murder",
+        "CrimeNameKhmer": "ឃាតកម្ម",
+        "FineMaximum": null,
+        "FineMinimum": null,
+        "SentenceMaximum": 10,
+        "SentenceMinimum": 15,
+        "SentenceMaximumUnit": "Y",
+        "SentenceMinimumUnit": "Y"
+    }
+]
