@@ -90,6 +90,7 @@ class SentenceGuide:
         self.probation_length_months = None
         self.probation_measures = None
         
+        
 
     def initialise_with_crime(self, crime_obj: Crime) -> None:
         self.crime = crime_obj
@@ -169,12 +170,12 @@ class SentenceGuide:
     
     def generate_report(self):
         report = f"""
-Sentence Guidelines Report
+Sentencing Report
 
 Report Date: {dt.datetime.today().strftime('%d/%m/%Y %H:%M:%S')}
 
-Sentence guideline maximum: {self.current_max_sentence.get_sentence_str()}
-Sentence guideline minimum: {self.current_min_sentence.get_sentence_str()}
+Sentence available maximum: {self.current_max_sentence.get_sentence_str()}
+Sentence available minimum: {self.current_min_sentence.get_sentence_str()}
 
 """
         if self.intended_sentence:
@@ -208,6 +209,9 @@ Pardoned: {str(self.prev_conviction_pardon)}
 Special reasons not to revoke a prior suspended sentence: {self.special_revoke_reasons}  
         """
         
+        if self.basis_of_mitigations:
+            report += f"  \n Mitigating Circumstances: {self.basis_of_mitigations}  \n"
+        
         for i in self.additional_penalties:
             report += f"""\n
 
@@ -221,6 +225,8 @@ Term: {i[1]} {i[2]}  \n       """
                     report += f"{i}  \n"
         
         return report
+    
+
     
     
         
