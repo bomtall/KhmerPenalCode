@@ -103,21 +103,7 @@ with rows["row1"][0]:
         crime = Crime(penal_dict[crime_dropdown])
         sentence_guide.initialise_with_crime(crime)
         
-with rows["row1"][1]:
-    st.markdown("#### Standard sentences ប្រយោគស្តង់ដារ")
-    if crime_dropdown:
-        st.metric(label="Max prison sentence ទោសជាប់ពន្ធនាគារអតិបរមា", value=crime.standard_max_sentence.get_sentence_str())
-        st.metric(label="Min prison sentence ទោសដាក់ពន្ធនាគារអប្បបរមា", value=crime.standard_min_sentence.get_sentence_str())
-        st.session_state["current_max_s"] = crime.standard_max_sentence.get_sentence_str()
-        st.session_state["current_min_s"] = crime.standard_min_sentence.get_sentence_str()
-    
-    
-with rows["row1"][2]:
-    st.markdown("#### Standard fines ការផាកពិន័យស្តង់ដារ")
-    if crime and crime.standard_max_fine:
-        st.metric(label="Max fine ការផាកពិន័យជាអតិបរមា", value="៛" + millify.millify(crime.standard_max_fine))
-        st.metric(label="Minimum fine ការផាកពិន័យអប្បបរមា", value="៛" + millify.millify(crime.standard_min_fine))
-    
+
 aggrevations_radio = None
 def update_radio():
     st.session_state["current_max_s"] = aggrevations_radio
@@ -178,7 +164,7 @@ with rows["row5"][1]:
         )
         sentence_guide.prev_conviction_type = prev_conviction_type
         
-    if sentence_guide.prev_conviction_type in ["Felony", "Misdemeanour"]:
+    if sentence_guide.prev_conviction_type in ["Felony / ឧក្រិដ្ឋកម្ម", "Misdemeanour / បទមជ្ឈិម"]:
         felony_misd_pronounced_5y = st.selectbox(
             label="Was a suspended sentence for any misdemeanour or felony pronounced within 5 years before the offence? (Art 109)",
             options=["Yes", "No"],
@@ -189,7 +175,7 @@ with rows["row5"][1]:
             
     if sentence_guide.felony_misd_pronounced_5y:
         st.markdown(
-            "**Note:** the prior suspended sentence is revoked and the applicable penalty for the new offence will not run concurrently"
+            "**Note:** the prior suspended sentence is revoked and the applicable penalty to run consecutively"
         )
         special_reasons = st.selectbox(
             label="Are there any special reasons not to revoke a prior suspended sentence? (Art 110) / តើ​មាន​ហេតុផល​ពិសេស​ណា​មួយ​ដែល​មិន​ត្រូវ​លុប​ចោល​ទោស​ព្យួរ​ទុក​មុន​ទេ? (សិល្បៈ ១១០)",
@@ -199,29 +185,29 @@ with rows["row5"][1]:
         if special_reasons == "Yes":
             sentence_guide.special_revoke_reasons = st.text_input(label="Please give reasons / សូមផ្តល់ហេតុផល")
                 
-with rows["row5"][2]:                   
-                   
-    if felony_misd_pronounced_5y == "No" and sentence_guide.prev_conviction_pardon == False and sentence_guide.prev_conviction_type in ["Felony", "Misdemeanour"]:
-        final_judgement_in_5y = st.selectbox(
-                label="Was the previous felony or misdemeanour final judgement within 5 years of the date of the offence? / តើបទឧក្រិដ្ឋពីមុន ឬបទមជ្ឈិមត្រូវកាត់ទោសចុងក្រោយក្នុងរយៈពេល 5 ឆ្នាំគិតចាប់ពីថ្ងៃប្រព្រឹត្តិបទល្មើសដែរឬទេ?",
-                options=["Yes", "No"],
-                index=None
-            )
-        if final_judgement_in_5y == "Yes":
-            sentence_guide.final_judgement_in_5y = True
+with rows["row5"][2]:
+    if sentence_guide.prev_conviction_type in ["Felony / ឧក្រិដ្ឋកម្ម", "Misdemeanour / បទមជ្ឈិម"]:
+        if felony_misd_pronounced_5y == "No" and sentence_guide.prev_conviction_pardon == False and sentence_guide.prev_conviction_type in ["Felony / ឧក្រិដ្ឋកម្ម", "Misdemeanour / បទមជ្ឈិម"]:
+            final_judgement_in_5y = st.selectbox(
+                    label="Was the previous felony or misdemeanour final judgement within 5 years of the date of the offence? / តើបទឧក្រិដ្ឋពីមុន ឬបទមជ្ឈិមត្រូវកាត់ទោសចុងក្រោយក្នុងរយៈពេល 5 ឆ្នាំគិតចាប់ពីថ្ងៃប្រព្រឹត្តិបទល្មើសដែរឬទេ?",
+                    options=["Yes", "No"],
+                    index=None
+                )
+            if final_judgement_in_5y == "Yes":
+                sentence_guide.final_judgement_in_5y = True
 
-    if sentence_guide.final_judgement_in_5y and sentence_guide.prev_conviction_type == "Felony":
+    if sentence_guide.final_judgement_in_5y and sentence_guide.prev_conviction_type == "Felony / ឧក្រិដ្ឋកម្ម":
         if sentence_guide.current_max_sentence.value < 6:
             sentence_guide.set_current_max_sentence(Sentence(6, "years"))
 
-            st.metric(
-                label="New maximum sentence / ប្រយោគអតិបរមាថ្មី។",
-                value=sentence_guide.current_max_sentence,
-                delta=sentence_guide.current_max_sentence - crime.standard_max_sentence,
-                delta_color="inverse"
-            )
+            # st.metric(
+            #     label="New maximum sentence / ប្រយោគអតិបរមាថ្មី។",
+            #     value=sentence_guide.current_max_sentence,
+            #     delta=sentence_guide.current_max_sentence - crime.standard_max_sentence,
+            #     delta_color="inverse"
+            # )
         
-    if sentence_guide.final_judgement_in_5y and sentence_guide.prev_conviction_type == "Misdemeanour":
+    if sentence_guide.final_judgement_in_5y and sentence_guide.prev_conviction_type == "Misdemeanour / បទមជ្ឈិម":
         prev_conviction_theft_trust_fraud = st.selectbox(
             label="Was the previous conviction for: Theft, breach of trust or fraud? / តើការកាត់ទោសពីមុនសម្រាប់៖ លួច រំលោភលើទំនុកចិត្ត ឬការក្លែងបន្លំ?",
             options=["Yes", "No"],
@@ -236,12 +222,12 @@ with rows["row5"][2]:
                 diff = utils.create_sentence_period(prev_conv_new_sentence.value - sentence_guide.current_max_sentence.value)
                 sentence_guide.set_current_max_sentence(prev_conv_new_sentence)
 
-                st.metric(
-                    label="New maximum sentence / ប្រយោគអតិបរមាថ្មី។",
-                    value=sentence_guide.current_max_sentence.get_sentence_str(),
-                    delta=diff,
-                    delta_color="inverse"
-                )
+                # st.metric(
+                #     label="New maximum sentence / ប្រយោគអតិបរមាថ្មី។",
+                #     value=sentence_guide.current_max_sentence.get_sentence_str(),
+                #     delta=diff,
+                #     delta_color="inverse"
+                # )
 
 
 with rows["row7"][0]:
@@ -281,8 +267,10 @@ with rows["row9"][0]:
             community_service = st.selectbox(label="Community Service / សេវាសហគមន៍", options=["Yes", "No"], index=None)
             if community_service == "Yes":
                 sentence_guide.community_service = True
-                cs_hours = st.slider(label="How many hours of community service? / តើសេវាសហគមន៍ប៉ុន្មានម៉ោង?", min_value=30, max_value=200, step=1, value=115)
-                cs_timeframe =  st.slider(label="Time for performance of community service in months / ពេលវេលាសម្រាប់ការអនុវត្តសេវាសហគមន៍គិតជាខែ", max_value=12, step=1, value=6)
+                cs_hours = st.number_input(label="How many hours of community service? / តើសេវាសហគមន៍ប៉ុន្មានម៉ោង?", min_value=30, max_value=200, step=1, value=115)
+                st.slider(label="", min_value=30, max_value=200, step=1, value=cs_hours, disabled=True)
+                cs_timeframe =  st.number_input(label="Time for performance of community service in months / ពេលវេលាសម្រាប់ការអនុវត្តសេវាសហគមន៍គិតជាខែ", max_value=12, step=1, value=6)
+                st.slider(label="", max_value=12, step=1, value=cs_timeframe, disabled=True)
                 sentence_guide.community_service_hours = cs_hours
                 sentence_guide.community_service_timeframe = cs_timeframe
             elif community_service == "No":
@@ -297,7 +285,7 @@ with rows["row9"][1]:
                 years = st.number_input(label="Years / ឆ្នាំ", min_value=sentence_guide.current_min_sentence.value, max_value=sentence_guide.current_max_sentence.value)
 
             else:
-                years = st.number_input(label="Years / ឆ្នាំ", min_value=0.0, max_value=float(math.ceil(sentence_guide.current_max_sentence.convert_to_years())), step=1.0)
+                years = st.number_input(label="Years / ឆ្នាំ", min_value=0, max_value=math.ceil(sentence_guide.current_max_sentence.convert_to_years()), step=1)
             months = st.number_input(label="Months / ខែ", min_value=0, max_value=12, step=1)
             weeks = st.number_input(label="Weeks / សប្តាហ៍", min_value=0, max_value=4, step=1)
             days = st.number_input(label="Days / ថ្ងៃ", min_value=0, max_value=7, step=1)
@@ -316,9 +304,9 @@ with rows["row9"][2]:
     
     fine_bool = st.checkbox(label="Intend to fine? / មានបំណងល្អ?")
     if fine_bool:
-        fine_input = st.number_input(label="Enter the intended fine amount / បញ្ចូលចំនួនទឹកប្រាក់ពិន័យដែលចង់បាន", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine))
-        fine_slider = st.slider(label="Enter the intended fine amount / បញ្ចូលចំនួនទឹកប្រាក់ពិន័យដែលចង់បាន", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine), format='៛%d', value=fine_input, disabled=True)
-        st.markdown(f"Fine: ៛{millify.millify(fine_input)}")
+        fine_input = st.number_input(label="Enter the intended fine amount / បញ្ចូលចំនួនទឹកប្រាក់ពិន័យដែលចង់បាន", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine), step=500000.00)
+        fine_slider = st.slider(label="", min_value=float(sentence_guide.current_min_fine), max_value=float(sentence_guide.current_max_fine), format='៛%d', value=fine_input, disabled=True)
+        st.markdown(f"Fine: ៛{millify.millify(fine_input, precision=1)}")
         sentence_guide.intended_fine = fine_input
     else:
         sentence_guide.intended_fine = 0
@@ -352,13 +340,13 @@ with rows["row11"][2]:
             if suspend_whole_fine == "Yes":
                 sentence_guide.fine_suspended = True
             elif suspend_whole_fine == "No":
-                fine_amount_to_suspend = st.slider(label="Amount to suspend / ចំនួនទឹកប្រាក់ដែលត្រូវផ្អាក", min_value=0.0, max_value=float(sentence_guide.intended_fine), format='៛%d')
+                fine_amount_to_suspend = st.number_input(label="៛ Amount to suspend / ចំនួនទឹកប្រាក់ដែលត្រូវផ្អាក", min_value=0.0, max_value=float(sentence_guide.intended_fine), step=500000.00)
                 sentence_guide.fine_amount_to_suspend = fine_amount_to_suspend
                 
 with rows["row11point5"][0]:
     if sentence_guide.sentence_suspended:
         if sentence_guide.intended_sentence.convert_to_years() < 5 and sentence_guide.intended_sentence.convert_to_years() > 0.5:
-            probation_length = st.slider(label="If probation is to be ordered state length of probation between one and three years (in months)", min_value=0, max_value=36)
+            probation_length = st.number_input(label="If probation is to be ordered state length of probation between one and three years (in months)", min_value=0, max_value=36, step=1)
             probation_measures = st.multiselect(
                 label="Select Probation Measures",
                 options=PROBATIONS
@@ -391,13 +379,29 @@ with rows["row15"][0]:
     
 with st.sidebar:
     st.markdown("## Khmer Penal Code Sentencing Application")
+
     
     if crime and sentence_guide.current_max_sentence:
-        st.markdown("### Sentencing range")
+        st.markdown("### Available Penalties ការពិន័យដែលមាន")
         st.markdown(f"Current max sentence: **{sentence_guide.current_max_sentence.get_sentence_str()}**")
         st.markdown(f"Current min sentence: **{sentence_guide.current_min_sentence.get_sentence_str()}**")
         st.markdown(f"Current max fine: **៛{millify.millify(sentence_guide.current_max_fine)}**")
         st.markdown(f"Current min fine: **៛{millify.millify(sentence_guide.current_min_fine)}**")
+        
+    if crime_dropdown:
+        st.markdown("#### Standard sentences ប្រយោគស្តង់ដារ")
+        st.markdown(f"Max prison sentence  \n ទោសជាប់ពន្ធនាគារអតិបរមា  \n **{crime.standard_max_sentence.get_sentence_str()}**")
+        st.markdown(f"Min prison sentence   \n ទោសដាក់ពន្ធនាគារអប្បបរមា  \n **{crime.standard_min_sentence.get_sentence_str()}**")
+        # st.session_state["current_max_s"] = crime.standard_max_sentence.get_sentence_str()
+        # st.session_state["current_min_s"] = crime.standard_min_sentence.get_sentence_str()
+    
+    if crime and crime.standard_max_fine:
+        st.markdown("#### Standard fines ការផាកពិន័យស្តង់ដារ")
+        st.markdown(f"Max fine ការផាកពិន័យជាអតិបរមា  \n ៛ **{millify.millify(crime.standard_max_fine)}**")
+        st.markdown(f"Minimum fine ការផាកពិន័យអប្បបរមា  \n ៛ **{millify.millify(crime.standard_min_fine)}**")
+        
+
+    
     
 st.link_button(
     label="Khmer Penal Code Sentencing Application Feedback. មតិកែលម្អឧបករណ៍ប្រយោគខ្មែរ",
